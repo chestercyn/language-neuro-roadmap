@@ -1,0 +1,1540 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Language Neuroscience Roadmap · Chester Cheung</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%236366f1'/%3E%3Cpath d='M8 22 L8 10 L13 10 M8 16 L12 16 M18 22 L22 10 L26 22 M19.5 18 L24.5 18' stroke='white' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
+<style>
+  :root {
+    --bg: #fafaf9;
+    --surface: #ffffff;
+    --surface-2: #f4f4f3;
+    --border: #e7e5e4;
+    --text: #1c1917;
+    --text-soft: #57534e;
+    --text-mute: #a8a29e;
+    --accent: #6366f1;
+    --accent-soft: #eef2ff;
+    --green: #10b981;
+    --amber: #f59e0b;
+    --red: #ef4444;
+    --shadow: 0 1px 2px rgba(0,0,0,0.04), 0 4px 12px rgba(0,0,0,0.04);
+    --radius: 10px;
+    --radius-sm: 6px;
+    --serif: ui-serif, "Iowan Old Style", "Source Serif Pro", Georgia, serif;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  }
+  html[data-theme="dark"] {
+    --bg: #0c0a09;
+    --surface: #1c1917;
+    --surface-2: #292524;
+    --border: #292524;
+    --text: #fafaf9;
+    --text-soft: #d6d3d1;
+    --text-mute: #78716c;
+    --accent: #818cf8;
+    --accent-soft: #1e1b4b;
+    --shadow: 0 1px 2px rgba(0,0,0,0.4), 0 4px 12px rgba(0,0,0,0.3);
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 14px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3, h4 { font-family: var(--serif); font-weight: 600; letter-spacing: -0.01em; margin: 0; }
+  h1 { font-size: 22px; }
+  h2 { font-size: 18px; }
+  h3 { font-size: 15px; }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  button {
+    font-family: inherit;
+    font-size: 13px;
+    padding: 6px 12px;
+    background: var(--surface);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all 0.12s ease;
+  }
+  button:hover { background: var(--surface-2); }
+  button.primary {
+    background: var(--accent);
+    color: white;
+    border-color: var(--accent);
+  }
+  button.primary:hover { filter: brightness(1.08); background: var(--accent); }
+  input, textarea, select {
+    font-family: inherit;
+    font-size: 13px;
+    padding: 6px 10px;
+    background: var(--surface);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    width: 100%;
+  }
+  textarea { resize: vertical; min-height: 60px; }
+
+  /* layout */
+  .app {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    min-height: 100vh;
+  }
+  aside.sidebar {
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    padding: 20px 16px;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+  .brand svg { width: 28px; height: 28px; }
+  .brand .name { font-family: var(--serif); font-weight: 600; font-size: 14px; line-height: 1.2; }
+  .brand .name small { display: block; font-family: var(--sans); font-weight: 400; font-size: 11px; color: var(--text-mute); margin-top: 2px; }
+  nav.tabs { display: flex; flex-direction: column; gap: 2px; }
+  nav.tabs button {
+    text-align: left;
+    background: transparent;
+    border: none;
+    padding: 8px 10px;
+    border-radius: var(--radius-sm);
+    color: var(--text-soft);
+    font-size: 13px;
+  }
+  nav.tabs button:hover { background: var(--surface-2); color: var(--text); }
+  nav.tabs button.active { background: var(--accent-soft); color: var(--accent); font-weight: 500; }
+  html[data-theme="dark"] nav.tabs button.active { color: var(--text); }
+  .sidebar-footer { margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border); display: flex; flex-direction: column; gap: 6px; }
+  .sidebar-footer button { font-size: 12px; padding: 5px 8px; text-align: left; }
+
+  main {
+    padding: 32px 40px;
+    max-width: 1200px;
+  }
+  .page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 24px;
+    gap: 16px;
+  }
+  .page-header .sub { color: var(--text-mute); font-size: 13px; margin-top: 6px; }
+
+  /* cards */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px;
+    box-shadow: var(--shadow);
+  }
+  .card + .card { margin-top: 16px; }
+  .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  @media (max-width: 900px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } }
+
+  /* overview stats */
+  .stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 24px; }
+  @media (max-width: 900px) { .stat-grid { grid-template-columns: repeat(2, 1fr); } }
+  .stat {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+  }
+  .stat .label { color: var(--text-mute); font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; }
+  .stat .value { font-family: var(--serif); font-size: 26px; font-weight: 600; margin-top: 4px; }
+  .stat .delta { font-size: 11px; color: var(--text-mute); margin-top: 2px; }
+
+  /* pillars */
+  .pillar-card { border-left: 4px solid var(--accent); }
+  .pillar-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 6px;
+  }
+  .pillar-head h2 { display: flex; align-items: center; gap: 8px; }
+  .pillar-tag {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text-mute);
+    background: var(--surface-2);
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+  .pillar-summary { color: var(--text-soft); font-size: 13px; margin-bottom: 12px; }
+  .pillar-progress {
+    height: 6px;
+    background: var(--surface-2);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 14px;
+  }
+  .pillar-progress .bar { height: 100%; background: var(--accent); transition: width 0.3s ease; }
+
+  /* module */
+  .module {
+    border-top: 1px solid var(--border);
+    padding: 14px 0;
+  }
+  .module:first-of-type { border-top: none; padding-top: 4px; }
+  .module-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .module-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+    min-width: 0;
+  }
+  .module-title .chev {
+    color: var(--text-mute);
+    font-size: 10px;
+    transition: transform 0.2s ease;
+    width: 10px;
+    flex-shrink: 0;
+  }
+  .module.open .module-title .chev { transform: rotate(90deg); }
+  .module-title h3 { font-family: var(--sans); font-size: 14px; font-weight: 500; }
+  .module-meta { display: flex; align-items: center; gap: 10px; font-size: 12px; color: var(--text-mute); flex-shrink: 0; }
+  .status-pill {
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-weight: 500;
+  }
+  .status-pill.todo { background: var(--surface-2); color: var(--text-mute); }
+  .status-pill.doing { background: #fef3c7; color: #92400e; }
+  .status-pill.done { background: #d1fae5; color: #065f46; }
+  html[data-theme="dark"] .status-pill.doing { background: #422006; color: #fbbf24; }
+  html[data-theme="dark"] .status-pill.done { background: #022c22; color: #34d399; }
+
+  .module-body {
+    display: none;
+    padding-top: 14px;
+    padding-left: 20px;
+  }
+  .module.open .module-body { display: block; }
+  .field { margin-bottom: 12px; }
+  .field-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-mute);
+    margin-bottom: 4px;
+    font-weight: 500;
+  }
+  .field-value { font-size: 13px; color: var(--text-soft); }
+  .field-value ul { margin: 4px 0 0 0; padding-left: 20px; }
+  .field-value li { margin-bottom: 3px; }
+
+  .module-controls {
+    background: var(--surface-2);
+    border-radius: var(--radius-sm);
+    padding: 12px;
+    margin-top: 12px;
+  }
+  .control-row { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+  .control-row label { font-size: 12px; color: var(--text-mute); min-width: 70px; }
+  .control-row input[type=range] { flex: 1; }
+  .control-row select { width: auto; min-width: 130px; }
+  .pct-display { font-family: var(--mono); font-size: 12px; color: var(--text); min-width: 40px; text-align: right; }
+
+  /* resources & experts inside module */
+  .res-list, .exp-list { display: flex; flex-direction: column; gap: 6px; }
+  .res-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+  }
+  .res-item .type-tag {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--text-mute);
+    background: var(--surface-2);
+    padding: 2px 5px;
+    border-radius: 3px;
+    text-transform: uppercase;
+    min-width: 50px;
+    text-align: center;
+  }
+  .module-controls .res-item .type-tag { background: var(--surface); }
+  .res-item input[type=checkbox] { width: auto; margin: 0; }
+  .exp-item { font-size: 13px; color: var(--text-soft); }
+  .exp-item strong { color: var(--text); }
+  .exp-item .aff { color: var(--text-mute); font-size: 12px; }
+
+  /* timeline */
+  .timeline-wrap { overflow-x: auto; padding-bottom: 12px; }
+  .timeline {
+    min-width: 800px;
+    position: relative;
+  }
+  .timeline-axis {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 6px;
+    margin-bottom: 8px;
+  }
+  .timeline-months {
+    display: grid;
+    grid-template-columns: repeat(36, 1fr);
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--text-mute);
+  }
+  .timeline-months span { text-align: center; }
+  .timeline-row {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    align-items: center;
+    margin-bottom: 4px;
+    font-size: 12px;
+  }
+  .timeline-label { color: var(--text-soft); padding-right: 8px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .timeline-track { position: relative; height: 18px; background: var(--surface-2); border-radius: 4px; }
+  .timeline-bar {
+    position: absolute;
+    height: 100%;
+    border-radius: 4px;
+    opacity: 0.85;
+    display: flex;
+    align-items: center;
+    padding: 0 6px;
+    font-size: 10px;
+    color: white;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .timeline-now {
+    position: absolute;
+    top: -2px;
+    bottom: -2px;
+    width: 2px;
+    background: var(--red);
+    z-index: 5;
+  }
+
+  /* log */
+  .log-form { display: grid; grid-template-columns: 130px 1fr 90px 1fr auto; gap: 8px; align-items: end; margin-bottom: 16px; }
+  @media (max-width: 900px) { .log-form { grid-template-columns: 1fr; } }
+  .log-form .field-label { margin-bottom: 4px; }
+  .log-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .log-table th, .log-table td { text-align: left; padding: 8px 6px; border-bottom: 1px solid var(--border); }
+  .log-table th { font-size: 11px; text-transform: uppercase; color: var(--text-mute); letter-spacing: 0.04em; font-weight: 500; }
+  .log-table .del-btn { padding: 2px 6px; font-size: 11px; color: var(--text-mute); }
+
+  .hours-chart { display: flex; align-items: flex-end; gap: 4px; height: 80px; margin-top: 12px; }
+  .hours-bar { flex: 1; background: var(--accent); border-radius: 2px 2px 0 0; min-height: 2px; position: relative; }
+  .hours-bar:hover::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--text);
+    color: var(--bg);
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 3px;
+    white-space: nowrap;
+    margin-bottom: 4px;
+  }
+
+  /* people view */
+  .people-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
+  .person-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px; }
+  .person-card .nm { font-family: var(--serif); font-size: 14px; font-weight: 600; }
+  .person-card .af { font-size: 12px; color: var(--text-mute); margin: 2px 0 6px; }
+  .person-card .wy { font-size: 12px; color: var(--text-soft); }
+  .person-card .pillar-mark { font-size: 10px; color: var(--text-mute); margin-top: 8px; font-family: var(--mono); }
+
+  /* first-principles */
+  .principles-list { font-family: var(--serif); font-size: 15px; line-height: 1.6; color: var(--text-soft); padding-left: 24px; }
+  .principles-list li { margin-bottom: 8px; }
+
+  .hidden { display: none !important; }
+
+  /* responsive */
+  @media (max-width: 720px) {
+    .app { grid-template-columns: 1fr; }
+    aside.sidebar { position: relative; height: auto; }
+    main { padding: 20px; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">
+      <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" aria-label="logo">
+        <rect width="32" height="32" rx="7" fill="#6366f1"/>
+        <circle cx="10" cy="12" r="2" fill="white"/>
+        <circle cx="22" cy="12" r="2" fill="white"/>
+        <circle cx="10" cy="22" r="2" fill="white"/>
+        <circle cx="22" cy="22" r="2" fill="white"/>
+        <circle cx="16" cy="17" r="2.4" fill="#fbbf24"/>
+        <path d="M10 12 L16 17 M22 12 L16 17 M10 22 L16 17 M22 22 L16 17 M10 12 L22 12 M10 22 L22 22" stroke="white" stroke-width="1.1" stroke-opacity="0.7" fill="none"/>
+      </svg>
+      <div class="name">Language·Neuro<small>Roadmap dashboard</small></div>
+    </div>
+    <nav class="tabs">
+      <button data-view="overview" class="active">Overview</button>
+      <button data-view="pillars">Pillars &amp; modules</button>
+      <button data-view="timeline">Timeline</button>
+      <button data-view="people">People to follow</button>
+      <button data-view="log">Learning log</button>
+      <button data-view="principles">First principles</button>
+    </nav>
+    <div class="sidebar-footer">
+      <button id="theme-toggle">Toggle theme</button>
+      <button id="export-btn">Export progress (JSON)</button>
+      <button id="import-btn">Import progress</button>
+      <input type="file" id="import-file" accept="application/json" class="hidden" />
+      <button id="reset-btn" style="color:var(--red)">Reset all data</button>
+    </div>
+  </aside>
+
+  <main>
+    <!-- OVERVIEW -->
+    <section id="view-overview">
+      <div class="page-header">
+        <div>
+          <h1 id="hello-name">Language Neuroscience Roadmap</h1>
+          <div class="sub" id="ultimate-goal"></div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-family:var(--mono); font-size:11px; color:var(--text-mute)" id="today-str"></div>
+          <div style="font-family:var(--mono); font-size:11px; color:var(--text-mute)" id="month-str"></div>
+        </div>
+      </div>
+
+      <div class="stat-grid">
+        <div class="stat"><div class="label">Overall progress</div><div class="value" id="stat-overall">0%</div><div class="delta" id="stat-overall-sub"></div></div>
+        <div class="stat"><div class="label">Modules in progress</div><div class="value" id="stat-doing">0</div><div class="delta" id="stat-doing-sub"></div></div>
+        <div class="stat"><div class="label">Modules completed</div><div class="value" id="stat-done">0</div><div class="delta" id="stat-done-sub"></div></div>
+        <div class="stat"><div class="label">Log hours (last 7d)</div><div class="value" id="stat-hours">0</div><div class="delta">tracked study time</div></div>
+      </div>
+
+      <div class="card">
+        <h2 style="margin-bottom:14px">Pillar progress</h2>
+        <div id="pillar-progress-list"></div>
+      </div>
+
+      <div class="card">
+        <h2 style="margin-bottom:8px">Recommended next modules</h2>
+        <div class="sub" style="color:var(--text-mute); margin-bottom:12px">Modules whose suggested window includes the current month and that aren't yet complete.</div>
+        <div id="next-modules"></div>
+      </div>
+    </section>
+
+    <!-- PILLARS -->
+    <section id="view-pillars" class="hidden">
+      <div class="page-header">
+        <div>
+          <h1>Pillars &amp; modules</h1>
+          <div class="sub">Five concentric pillars · 17 modules · 36-month horizon. Click any module to expand.</div>
+        </div>
+      </div>
+      <div id="pillars-container"></div>
+    </section>
+
+    <!-- TIMELINE -->
+    <section id="view-timeline" class="hidden">
+      <div class="page-header">
+        <div>
+          <h1>Timeline</h1>
+          <div class="sub">Suggested learning windows across 36 months. The red line marks today.</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="timeline-wrap"><div id="timeline" class="timeline"></div></div>
+      </div>
+    </section>
+
+    <!-- PEOPLE -->
+    <section id="view-people" class="hidden">
+      <div class="page-header">
+        <div>
+          <h1>People to follow</h1>
+          <div class="sub">Curated experts whose work you should track — papers, talks, lab outputs.</div>
+        </div>
+      </div>
+      <div id="people-container"></div>
+    </section>
+
+    <!-- LOG -->
+    <section id="view-log" class="hidden">
+      <div class="page-header">
+        <div>
+          <h1>Learning log</h1>
+          <div class="sub">Quick capture: date · module · hours · note. Builds the weekly hours chart.</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="log-form">
+          <div>
+            <div class="field-label">Date</div>
+            <input type="date" id="log-date" />
+          </div>
+          <div>
+            <div class="field-label">Module</div>
+            <select id="log-module"></select>
+          </div>
+          <div>
+            <div class="field-label">Hours</div>
+            <input type="number" id="log-hours" min="0" step="0.25" value="1" />
+          </div>
+          <div>
+            <div class="field-label">What you learned</div>
+            <input type="text" id="log-note" placeholder="e.g. read Hickok & Poeppel 2007, drafted comparison table" />
+          </div>
+          <div>
+            <button class="primary" id="log-add">Add entry</button>
+          </div>
+        </div>
+        <h3 style="margin:8px 0 4px">Weekly hours (last 12 weeks)</h3>
+        <div class="hours-chart" id="hours-chart"></div>
+        <div style="margin-top:20px">
+          <table class="log-table" id="log-table">
+            <thead><tr><th>Date</th><th>Module</th><th>Hours</th><th>Note</th><th></th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- PRINCIPLES -->
+    <section id="view-principles" class="hidden">
+      <div class="page-header">
+        <div>
+          <h1>First principles</h1>
+          <div class="sub">The axioms this roadmap is built on. Revisit when feeling lost in the details.</div>
+        </div>
+      </div>
+      <div class="card">
+        <h2 style="margin-bottom:12px">Ultimate goal</h2>
+        <p id="principles-goal" style="font-family:var(--serif); font-size:16px; line-height:1.55; color:var(--text); margin:0 0 24px"></p>
+        <h2 style="margin-bottom:12px">Five axioms</h2>
+        <ol class="principles-list" id="principles-list"></ol>
+      </div>
+      <div class="card">
+        <h2 style="margin-bottom:8px">How the pillars are derived</h2>
+        <p style="color:var(--text-soft); font-size:14px; line-height:1.6">
+          From axiom 1 (language = networks) → <strong>Pillar 1</strong> (foundations) and <strong>Pillar 3</strong> (advanced connectomics) are mandatory.
+          From axiom 2 (disease = perturbation) and axiom 3 (stimulation = reshaping) → <strong>Pillar 4</strong> (causal neuromodulation) bridges mechanism to clinic.
+          From axiom 1's spatial-temporal demands → <strong>Pillar 2</strong> (multimodal imaging) widens the lens beyond EEG.
+          From axiom 4 (rigour) and axiom 5 (cross-disciplinary leverage) → <strong>Pillar 5</strong> (clinical translation, ML, lab leadership) is the synthesis layer where you become more than the sum of your methods.
+        </p>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script>
+// Language Neuroscience Expert Roadmap — designed from first principles
+// for Chester Cheung (PhD candidate, HKU). Each module: goal, window (months),
+// knowledge/skills, resources, experts, rationale, method.
+// Timeline anchor: month 0 = today; horizon = 36 months.
+
+window.ROADMAP = {
+  meta: {
+    ownerName: "Chester Cheung",
+    ultimateGoal: "Become a world-leading expert on how language arises in the human brain, how it is impaired by disease, and how to restore it — through integrated EEG/multimodal connectomics, computational modelling, and network-targeted neuromodulation.",
+    horizonMonths: 36,
+    startISO: new Date().toISOString().slice(0,10),
+    firstPrinciples: [
+      "Language is implemented by recurrent, hierarchically organised brain networks — so studying language requires deep fluency in network neuroscience, not just regional activations.",
+      "Disease is a perturbation of those networks — so restoration requires causal, mechanistic models linking lesion → network → behaviour.",
+      "Stimulation works by reshaping network dynamics — so neuromodulation must be informed by connectomics and biophysical modelling.",
+      "Every claim must be testable, reproducible, and ideally pre-registered — methodological rigour is itself a substrate of expertise.",
+      "Cross-disciplinary fluency (linguistics, computation, clinical) compounds: the rarest experts are bilingual across these worlds."
+    ]
+  },
+  pillars: [
+    {
+      id: "P1",
+      name: "Foundational substrates",
+      color: "#6366f1",
+      summary: "Linguistics, cognitive neuroscience of language, computational/Bayesian brain, advanced statistics — the bedrock on which every later module rests.",
+      modules: [
+        {
+          id: "P1-M1",
+          title: "Linguistics & psycholinguistics primer",
+          goal: "Speak fluently about phonology, morphology, syntax, semantics, pragmatics, and the major theoretical frameworks (generative vs usage-based).",
+          window: [0, 4],
+          knowledge: [
+            "Levels of linguistic representation and their psycholinguistic correlates",
+            "Lexical access, sentence parsing, semantic composition, discourse coherence",
+            "Levelt's speech production model; Dell's interactive activation model",
+            "Statistical learning and prediction in language"
+          ],
+          resources: [
+            { type: "book", label: "Pinker — The Language Instinct", url: "https://stevenpinker.com/publications/language-instinct" },
+            { type: "book", label: "Jackendoff — Foundations of Language", url: "https://global.oup.com/academic/product/foundations-of-language-9780199264377" },
+            { type: "book", label: "Harley — The Psychology of Language", url: "https://www.routledge.com/The-Psychology-of-Language-From-Data-to-Theory/Harley/p/book/9781848720893" },
+            { type: "course", label: "MIT OCW 9.59 Psycholinguistics", url: "https://ocw.mit.edu/courses/9-59j-psycholinguistics-spring-2017/" }
+          ],
+          experts: [
+            { name: "Steven Pinker", aff: "Harvard", why: "Synthesiser of language-as-instinct framework" },
+            { name: "Willem Levelt", aff: "MPI Nijmegen", why: "Canonical production model" },
+            { name: "Ray Jackendoff", aff: "Tufts", why: "Parallel architecture; bridge to neuroscience" }
+          ],
+          rationale: "You cannot model what you cannot precisely describe. Many neuroimaging studies of 'language' confound lexical, syntactic, and pragmatic processes because the investigator lacks linguistic granularity.",
+          method: "Read one chapter/week + maintain a Anki/Obsidian glossary of 200 core terms. Re-analyse one of your own aphasia datasets with finer linguistic coding as a capstone."
+        },
+        {
+          id: "P1-M2",
+          title: "Cognitive neuroscience of language — dual-stream & beyond",
+          goal: "Master the canonical neurobiological models of language and where they disagree.",
+          window: [1, 6],
+          knowledge: [
+            "Hickok–Poeppel dual-stream model",
+            "Friederici syntax-first model and Hagoort MUC model",
+            "Fedorenko language network vs multiple-demand network",
+            "Functional segregation of Broca's area; arcuate fasciculus anatomy"
+          ],
+          resources: [
+            { type: "book", label: "Friederici — Language in Our Brain (MIT Press)", url: "https://mitpress.mit.edu/9780262036924/" },
+            { type: "paper", label: "Hickok & Poeppel 2007 — Cortical organization of speech processing", url: "https://www.nature.com/articles/nrn2113" },
+            { type: "paper", label: "Hagoort 2013 — MUC (Memory, Unification, Control)", url: "https://www.frontiersin.org/articles/10.3389/fpsyg.2013.00416/full" },
+            { type: "paper", label: "Fedorenko et al. 2024 — Language network update", url: "https://www.nature.com/articles/s41583-024-00802-4" }
+          ],
+          experts: [
+            { name: "Greg Hickok", aff: "UC Irvine", why: "Dual-stream architect" },
+            { name: "David Poeppel", aff: "NYU / MPI Frankfurt", why: "Neural oscillations × speech" },
+            { name: "Angela Friederici", aff: "MPI Leipzig", why: "Syntax & developmental trajectories" },
+            { name: "Peter Hagoort", aff: "Donders / MPI Nijmegen", why: "Unification & MEG" },
+            { name: "Evelina Fedorenko", aff: "MIT", why: "Functional localiser approach; LLM-brain mapping" }
+          ],
+          rationale: "These are the conceptual scaffolds that your future experiments will confirm, refine, or overturn. You must know them deeply enough to critique them.",
+          method: "Build a Markdown comparison table of models (regions, processes, predictions, falsifiers). Present it in a lab meeting."
+        },
+        {
+          id: "P1-M3",
+          title: "Computational & Bayesian brain",
+          goal: "Read predictive-coding and active-inference papers without translation; implement a toy model.",
+          window: [3, 9],
+          knowledge: [
+            "Free-energy principle and active inference (Friston)",
+            "Predictive coding hierarchies; precision-weighted prediction error",
+            "Hierarchical Bayesian models of perception and language",
+            "Bayesian model selection (BMS), Bayes factors"
+          ],
+          resources: [
+            { type: "book", label: "Parr, Pezzulo & Friston — Active Inference (MIT Press, open access)", url: "https://mitpress.mit.edu/9780262045353/active-inference/" },
+            { type: "paper", label: "Friston 2010 — Free-energy principle", url: "https://www.nature.com/articles/nrn2787" },
+            { type: "paper", label: "Lupyan & Clark 2015 — Words & predictive minds", url: "https://www.sciencedirect.com/science/article/pii/S1364661315000546" },
+            { type: "course", label: "Neuromatch Academy — Bayesian Statistics + Deep Learning", url: "https://compneuro.neuromatch.io/" }
+          ],
+          experts: [
+            { name: "Karl Friston", aff: "UCL", why: "FEP/active inference" },
+            { name: "Andy Clark", aff: "Sussex", why: "Philosophy of predictive minds" },
+            { name: "Floris de Lange", aff: "Donders", why: "Empirical predictive coding" }
+          ],
+          rationale: "Language is fundamentally predictive (next-word, prosodic, pragmatic). A computational vocabulary is mandatory for the next decade of the field.",
+          method: "Reproduce one active-inference notebook from pymdp; write a 1-page critique of its biological plausibility."
+        },
+        {
+          id: "P1-M4",
+          title: "Advanced statistics for neuroscience",
+          goal: "Master mixed-effects, Bayesian hierarchical, and causal-inference toolkits at production quality.",
+          window: [2, 9],
+          knowledge: [
+            "Linear & generalised mixed models; random-slope structure",
+            "Bayesian hierarchical models in brms / Stan",
+            "Multiple comparisons: cluster-based permutation, TFCE, FDR",
+            "Causal inference: DAGs, instrumental variables, mediation",
+            "Reproducibility: pre-registration, multiverse analyses"
+          ],
+          resources: [
+            { type: "book", label: "McElreath — Statistical Rethinking (2nd ed.) + lectures", url: "https://xcelab.net/rm/" },
+            { type: "book", label: "Gelman et al. — Bayesian Data Analysis (3rd ed.)", url: "http://www.stat.columbia.edu/~gelman/book/" },
+            { type: "course", label: "Solomon Kurz — Statistical Rethinking with brms/tidyverse", url: "https://bookdown.org/content/4857/" },
+            { type: "paper", label: "Maris & Oostenveld 2007 — Cluster permutation in EEG/MEG", url: "https://www.sciencedirect.com/science/article/pii/S0165027007001707" }
+          ],
+          experts: [
+            { name: "Richard McElreath", aff: "MPI Leipzig", why: "Best Bayesian teacher alive" },
+            { name: "Andrew Gelman", aff: "Columbia", why: "Hierarchical modelling" },
+            { name: "Eric-Jan Wagenmakers", aff: "Amsterdam", why: "Bayesian inference in psych/neuro; JASP" }
+          ],
+          rationale: "Your competitive moat as a clinician-scientist is statistical rigour. JASP is a starting point; brms/Stan is the destination.",
+          method: "Convert one previously-published frequentist analysis from your own work into a Bayesian hierarchical replication. Compare conclusions."
+        }
+      ]
+    },
+    {
+      id: "P2",
+      name: "Multimodal neuroimaging",
+      color: "#0ea5e9",
+      summary: "Extend EEG fluency into MEG, fMRI/DTI, intracranial recordings, source localisation, and multimodal fusion.",
+      modules: [
+        {
+          id: "P2-M1",
+          title: "EEG source localisation & MEG",
+          goal: "Run beamformer/MNE source reconstruction end-to-end; understand MEG's complementary strengths.",
+          window: [4, 12],
+          knowledge: [
+            "Forward modelling: BEM, FEM head models",
+            "Inverse solutions: minimum-norm, LCMV beamformer, dSPM, eLORETA",
+            "MEG sensor physics (SQUIDs, OPMs); MEG vs EEG trade-offs",
+            "Co-registration and individual-MRI pipelines"
+          ],
+          resources: [
+            { type: "tool", label: "MNE-Python tutorials", url: "https://mne.tools/stable/auto_tutorials/index.html" },
+            { type: "tool", label: "FieldTrip walkthroughs", url: "https://www.fieldtriptoolbox.org/tutorial/" },
+            { type: "course", label: "CuttingEEG / CuttingGardens workshops", url: "https://cuttinggardens2024.org/" },
+            { type: "paper", label: "Gross et al. 2013 — Good practice for MEG", url: "https://www.sciencedirect.com/science/article/pii/S1053811912010683" }
+          ],
+          experts: [
+            { name: "Riitta Salmelin", aff: "Aalto", why: "MEG of language" },
+            { name: "Sylvain Baillet", aff: "McGill", why: "Brainstorm, MEG methods" },
+            { name: "Jan-Mathijs Schoffelen", aff: "Donders", why: "FieldTrip lead; connectivity" }
+          ],
+          rationale: "Sensor-space EEG conflates sources. To make network claims, source space is non-negotiable. MEG also opens collaborator pools.",
+          method: "Take one of your published EEG datasets through MNE source reconstruction; produce a comparison figure (sensor vs source connectivity)."
+        },
+        {
+          id: "P2-M2",
+          title: "fMRI & diffusion MRI for language",
+          goal: "Design, preprocess, and analyse task and resting fMRI; reconstruct language tracts with tractography.",
+          window: [6, 15],
+          knowledge: [
+            "BOLD physiology; GLM and HRF assumptions",
+            "fMRIPrep, XCP-D, and BIDS pipelines",
+            "Resting-state networks; ICA and seed-based methods",
+            "DWI preprocessing (TOPUP/EDDY), CSD, tractography of AF/IFOF/UF/ILF",
+            "Language fMRI localiser (Fedorenko)"
+          ],
+          resources: [
+            { type: "tool", label: "fMRIPrep + BIDS", url: "https://fmriprep.org/" },
+            { type: "tool", label: "MRtrix3 tractography", url: "https://www.mrtrix.org/" },
+            { type: "course", label: "Andy's Brain Book (free fMRI/DWI courses)", url: "https://andysbrainbook.readthedocs.io/" },
+            { type: "paper", label: "Fedorenko et al. 2010 — Language localiser", url: "https://pubmed.ncbi.nlm.nih.gov/20410363/" }
+          ],
+          experts: [
+            { name: "Russell Poldrack", aff: "Stanford", why: "Open neuroimaging, reproducibility" },
+            { name: "Marco Catani", aff: "King's College London", why: "Language tractography" },
+            { name: "Maurizio Corbetta", aff: "Padova", why: "Stroke connectomics" }
+          ],
+          rationale: "EEG temporal precision plus fMRI/DWI spatial precision is the modern multimodal standard. You will collaborate with these communities for the rest of your career.",
+          method: "Complete the OpenNeuro 'aphasia tutorial' on a public dataset (e.g. ds004884) and reproduce one figure from a recent paper."
+        },
+        {
+          id: "P2-M3",
+          title: "Intracranial recordings (ECoG, sEEG)",
+          goal: "Read and (eventually) contribute to ECoG language papers; understand high-gamma as a language readout.",
+          window: [12, 24],
+          knowledge: [
+            "High-gamma activity as proxy for local population firing",
+            "Speech motor cortex decoding (Chang lab)",
+            "Naturalistic story-listening paradigms",
+            "Ethical & surgical context of patient research"
+          ],
+          resources: [
+            { type: "paper", label: "Mesgarani & Chang — Selective cortical representation of attended speech", url: "https://www.nature.com/articles/nature11020" },
+            { type: "paper", label: "Goldstein et al. 2022 — Shared computational principles for language in humans and LLMs", url: "https://www.nature.com/articles/s41593-022-01026-4" },
+            { type: "dataset", label: "DANDI / Brain Initiative open ECoG datasets", url: "https://dandiarchive.org/" }
+          ],
+          experts: [
+            { name: "Edward Chang", aff: "UCSF", why: "Speech motor + BCI" },
+            { name: "Nima Mesgarani", aff: "Columbia", why: "Auditory cortical coding" },
+            { name: "Uri Hasson", aff: "Princeton", why: "Naturalistic + LLM-brain alignment" }
+          ],
+          rationale: "Intracranial data are the ground truth for testing models built from scalp EEG. You don't need to record them yourself — you need to read them critically and triangulate.",
+          method: "Pick one ECoG paper/quarter; annotate its analysis pipeline and identify what it would predict about your scalp EEG findings."
+        }
+      ]
+    },
+    {
+      id: "P3",
+      name: "Advanced connectomics & dynamics",
+      color: "#10b981",
+      summary: "Push from connectivity matrices into effective connectivity, neural mass models, network control, and brain-state dynamics.",
+      modules: [
+        {
+          id: "P3-M1",
+          title: "Graph theory & network neuroscience — advanced",
+          goal: "Move beyond hub/degree to controllability, multilayer networks, and dynamic FC.",
+          window: [4, 14],
+          knowledge: [
+            "Modularity, rich-club, core-periphery beyond basics",
+            "Multilayer & multiplex network construction",
+            "Network control theory (Bassett, Pasqualetti)",
+            "Dynamic functional connectivity, sliding windows vs HMMs",
+            "Edge-centric and hypergraph approaches"
+          ],
+          resources: [
+            { type: "book", label: "Fornito, Zalesky & Bullmore — Fundamentals of Brain Network Analysis", url: "https://shop.elsevier.com/books/fundamentals-of-brain-network-analysis/fornito/978-0-12-407908-3" },
+            { type: "book", label: "Sporns — Networks of the Brain", url: "https://mitpress.mit.edu/9780262528986/networks-of-the-brain/" },
+            { type: "paper", label: "Gu et al. 2015 — Controllability of structural brain networks", url: "https://www.nature.com/articles/ncomms9414" },
+            { type: "tool", label: "Brain Connectivity Toolbox (BCT)", url: "https://sites.google.com/site/bctnet/" }
+          ],
+          experts: [
+            { name: "Olaf Sporns", aff: "Indiana", why: "Founder of connectomics" },
+            { name: "Danielle Bassett", aff: "UPenn", why: "Network control theory" },
+            { name: "Alex Fornito", aff: "Monash", why: "Methods + clinical translation" }
+          ],
+          rationale: "You are already a connectivity person — but expert-level requires fluency in 5+ years of post-2020 advances (control, multilayer, dynamic).",
+          method: "Re-analyse a chronic-aphasia dataset with controllability + dynamic FC; write a methods-comparison preprint."
+        },
+        {
+          id: "P3-M2",
+          title: "Effective connectivity & biophysical modelling",
+          goal: "Build and compare DCM/regression-DCM models; understand neural mass / whole-brain models.",
+          window: [9, 20],
+          knowledge: [
+            "DCM for EEG/MEG (CMC, ERP, CSD models)",
+            "Regression DCM and sparse DCM for large networks",
+            "Neural mass models (Jansen-Rit, Wilson-Cowan)",
+            "The Virtual Brain (TVB) and whole-brain simulation",
+            "Mean-field / dynamic mean-field models (Deco)"
+          ],
+          resources: [
+            { type: "tool", label: "SPM DCM-for-EEG tutorials", url: "https://www.fil.ion.ucl.ac.uk/spm/" },
+            { type: "tool", label: "The Virtual Brain (TVB)", url: "https://www.thevirtualbrain.org/" },
+            { type: "paper", label: "Deco et al. — Whole-brain modelling reviews", url: "https://www.nature.com/articles/nrn3214" }
+          ],
+          experts: [
+            { name: "Gustavo Deco", aff: "UPF Barcelona", why: "Whole-brain dynamics" },
+            { name: "Karl Friston", aff: "UCL", why: "DCM originator" },
+            { name: "Petra Ritter", aff: "Charité", why: "TVB clinical applications" }
+          ],
+          rationale: "Effective connectivity moves you from correlations to mechanisms — essential for the 'how language arises' question.",
+          method: "Replicate one DCM-EEG tutorial dataset; then fit a DCM to your own pre/post-tACS data."
+        },
+        {
+          id: "P3-M3",
+          title: "Brain state dynamics & low-dimensional manifolds",
+          goal: "Apply HMM/LEiDA/manifold methods to characterise language-related state transitions.",
+          window: [12, 24],
+          knowledge: [
+            "Hidden Markov Models for M/EEG (Vidaurre, Woolrich)",
+            "LEiDA, co-activation patterns, quasi-periodic patterns",
+            "Neural manifolds and latent dynamics",
+            "State-transition energy & control"
+          ],
+          resources: [
+            { type: "tool", label: "OHBA HMM-MAR toolbox", url: "https://github.com/OHBA-analysis/HMM-MAR" },
+            { type: "paper", label: "Vidaurre et al. 2018 — Spontaneous cortical activity transiently organises", url: "https://www.nature.com/articles/s41467-018-05316-z" }
+          ],
+          experts: [
+            { name: "Diego Vidaurre", aff: "Aarhus", why: "HMMs for M/EEG" },
+            { name: "Morten Kringelbach", aff: "Oxford/Aarhus", why: "Dynamic state repertoires" }
+          ],
+          rationale: "Language unfolds in time. Static connectivity averages away the very dynamics you want to study.",
+          method: "Run an HMM on a resting-EEG aphasia cohort; relate state occupancy to behavioural scores."
+        }
+      ]
+    },
+    {
+      id: "P4",
+      name: "Causal & restorative neuromodulation",
+      color: "#f59e0b",
+      summary: "Extend tACS expertise into mechanism, network-targeted stimulation, focused ultrasound, lesion-network mapping, and neuroplasticity.",
+      modules: [
+        {
+          id: "P4-M1",
+          title: "Biophysics & mechanism of NIBS",
+          goal: "Speak precisely about current flow, entrainment, plasticity windows, and individualised dosing.",
+          window: [3, 12],
+          knowledge: [
+            "E-field modelling (SimNIBS, ROAST)",
+            "Entrainment vs plasticity mechanisms in tACS",
+            "TMS biophysics: figure-of-8, theta-burst, paired-pulse",
+            "Closed-loop & state-dependent stimulation",
+            "Individualised dosing & responder/non-responder problem"
+          ],
+          resources: [
+            { type: "tool", label: "SimNIBS", url: "https://simnibs.github.io/simnibs/" },
+            { type: "tool", label: "ROAST", url: "https://www.parralab.org/roast/" },
+            { type: "paper", label: "Vosskuhl, Strüber & Herrmann 2018 — Non-invasive brain stimulation: state of the art", url: "https://www.frontiersin.org/articles/10.3389/fnhum.2018.00211/full" }
+          ],
+          experts: [
+            { name: "Christoph Herrmann", aff: "Oldenburg", why: "tACS oscillation entrainment" },
+            { name: "Gregor Thut", aff: "Glasgow", why: "Rhythmic TMS / tACS" },
+            { name: "Marom Bikson", aff: "CCNY", why: "tDCS biophysics" }
+          ],
+          rationale: "If your future RCTs depend on stimulation, your dosing must be defensible at the biophysical level.",
+          method: "Run SimNIBS on a real subject's MRI; compute E-field for two montages; write a methods note."
+        },
+        {
+          id: "P4-M2",
+          title: "Network-targeted & closed-loop stimulation",
+          goal: "Design stimulation guided by individual connectivity; understand closed-loop architectures.",
+          window: [9, 24],
+          knowledge: [
+            "Connectome-guided TMS targeting (Fox lab)",
+            "Phase-locked / state-dependent tACS",
+            "Adaptive closed-loop systems (real-time EEG)",
+            "Focused ultrasound (tFUS): mechanism, targeting, safety"
+          ],
+          resources: [
+            { type: "paper", label: "Fox et al. — Resting-state networks link DBS, TMS, lesions", url: "https://www.pnas.org/doi/10.1073/pnas.1405003111" },
+            { type: "paper", label: "Zrenner et al. — Real-time phase-triggered TMS", url: "https://www.sciencedirect.com/science/article/pii/S1053811917311448" }
+          ],
+          experts: [
+            { name: "Michael D. Fox", aff: "Harvard/BWH", why: "Lesion- & connectivity-guided stimulation" },
+            { name: "Christoph Zrenner", aff: "Toronto", why: "Closed-loop TMS" },
+            { name: "Wynn Legon", aff: "Virginia Tech", why: "Transcranial focused ultrasound" }
+          ],
+          rationale: "The frontier is shifting from one-size-fits-all to network-individualised intervention. Position yourself there.",
+          method: "Sketch a connectome-guided tACS protocol for a single aphasia case; submit as a registered report proposal."
+        },
+        {
+          id: "P4-M3",
+          title: "Lesion-network mapping & post-stroke plasticity",
+          goal: "Map symptoms to networks, not just lesions; design rehabilitation that exploits plastic windows.",
+          window: [6, 20],
+          knowledge: [
+            "Lesion-network mapping methodology (Fox/Siddiqi)",
+            "Disconnectome / BCBToolkit approaches",
+            "Critical periods of post-stroke plasticity (subacute window)",
+            "Intensity-based rehab (CIAT, ILAT) + neuromodulation pairing"
+          ],
+          resources: [
+            { type: "tool", label: "BCBToolkit / Disconnectome maps", url: "http://toolkit.bcblab.com/" },
+            { type: "paper", label: "Siddiqi, Kording, Grafman, Fox 2022 — Causal mapping of human brain function", url: "https://www.nature.com/articles/s41583-022-00583-8" },
+            { type: "paper", label: "Saur et al. — Dynamics of language reorganisation after stroke", url: "https://academic.oup.com/brain/article/129/6/1371/391105" }
+          ],
+          experts: [
+            { name: "Shan Siddiqi", aff: "Harvard/BWH", why: "Lesion-network in psychiatry/neurology" },
+            { name: "Cynthia Thompson", aff: "Northwestern", why: "Aphasia treatment & plasticity" },
+            { name: "Cathy Price", aff: "UCL", why: "PLORAS, predicting recovery" }
+          ],
+          rationale: "This is the bridge directly into your career thesis: from network science to clinical restoration.",
+          method: "Apply lesion-network mapping to your existing aphasia cohort; relate connectivity disruption to discourse outcomes."
+        }
+      ]
+    },
+    {
+      id: "P5",
+      name: "Clinical translation, ML & lab leadership",
+      color: "#ef4444",
+      summary: "Aphasia phenotyping, biomarker discovery, RCTs, machine learning for neural data, LLM-as-model-of-language, open science, mentoring.",
+      modules: [
+        {
+          id: "P5-M1",
+          title: "Aphasia phenotyping & discourse analysis at scale",
+          goal: "Move from group-mean to individualised, multidimensional phenotyping using NLP + neuroimaging.",
+          window: [3, 18],
+          knowledge: [
+            "Modern aphasia taxonomies beyond Boston (PPA variants, primary progressive)",
+            "Automated discourse metrics: CLAN, SALT, modern NLP pipelines",
+            "Multimodal phenotyping (behaviour + lesion + connectivity)",
+            "Latent-class / mixture modelling of patient profiles"
+          ],
+          resources: [
+            { type: "tool", label: "TalkBank / AphasiaBank", url: "https://aphasia.talkbank.org/" },
+            { type: "paper", label: "Mirman et al. — Neural and behavioural subtypes of aphasia", url: "https://academic.oup.com/brain/article/138/8/2415/330253" }
+          ],
+          experts: [
+            { name: "Brian MacWhinney", aff: "CMU", why: "TalkBank/AphasiaBank" },
+            { name: "Swathi Kiran", aff: "Boston University", why: "Aphasia treatment + neural predictors" },
+            { name: "Maria Luisa Gorno-Tempini", aff: "UCSF", why: "PPA phenotyping" }
+          ],
+          rationale: "Clinical impact requires patient-level precision. Group averages do not treat anyone.",
+          method: "Build a reproducible discourse pipeline (Python) and apply it to AphasiaBank + your own data."
+        },
+        {
+          id: "P5-M2",
+          title: "Machine learning & deep learning for neural data",
+          goal: "Use ML responsibly for decoding, prediction, and representational analysis.",
+          window: [6, 24],
+          knowledge: [
+            "Cross-validation done right; nested CV; data leakage",
+            "Representational Similarity Analysis (RSA)",
+            "Encoding/decoding models, ridge regression",
+            "Modern deep learning: transformers, self-supervised models",
+            "Interpretability: SHAP, integrated gradients, probing"
+          ],
+          resources: [
+            { type: "course", label: "Neuromatch Deep Learning", url: "https://deeplearning.neuromatch.io/" },
+            { type: "tool", label: "scikit-learn + MNE decoding tutorials", url: "https://mne.tools/stable/auto_tutorials/machine-learning/index.html" },
+            { type: "paper", label: "Kriegeskorte & Diedrichsen 2019 — Peeling the onion of brain representations", url: "https://www.annualreviews.org/doi/10.1146/annurev-neuro-080317-061906" }
+          ],
+          experts: [
+            { name: "Nikolaus Kriegeskorte", aff: "Columbia", why: "RSA, model-brain comparison" },
+            { name: "Jean-Rémi King", aff: "Meta AI / ENS", why: "MEG decoding + LLM brain mapping" }
+          ],
+          rationale: "ML is now table-stakes. The differentiator is using it carefully and theory-driven, not as a black box.",
+          method: "Replicate one MNE decoding tutorial; then run an RSA between an LLM layer and your EEG data."
+        },
+        {
+          id: "P5-M3",
+          title: "LLMs as models of language cortex",
+          goal: "Critically evaluate LLM-brain alignment work and design experiments that disambiguate models.",
+          window: [9, 24],
+          knowledge: [
+            "Encoding models with LLM embeddings",
+            "Prediction-based vs structural accounts",
+            "Limits of LLM-brain mapping (Antonello, Tuckute critiques)",
+            "Multimodal foundation models for neuroscience"
+          ],
+          resources: [
+            { type: "paper", label: "Schrimpf et al. 2021 — Neural architecture of language", url: "https://www.pnas.org/doi/10.1073/pnas.2105646118" },
+            { type: "paper", label: "Tuckute et al. 2024 — Driving and suppressing the human language network", url: "https://www.nature.com/articles/s41562-023-01783-7" },
+            { type: "paper", label: "Antonello et al. — Scaling laws for language encoding models in fMRI", url: "https://arxiv.org/abs/2305.11863" }
+          ],
+          experts: [
+            { name: "Evelina Fedorenko", aff: "MIT", why: "Language network + LLMs" },
+            { name: "Uri Hasson", aff: "Princeton", why: "Naturalistic + GPT-brain alignment" },
+            { name: "Greta Tuckute", aff: "MIT", why: "Causal LLM-driven brain manipulations" }
+          ],
+          rationale: "This is the hottest frontier of language neuroscience. Being early gives you outsized leverage.",
+          method: "Reproduce one LLM-encoding paper on a public dataset; write a critique in your own voice."
+        },
+        {
+          id: "P5-M4",
+          title: "RCT design, open science & lab leadership",
+          goal: "Design and lead pre-registered, reproducible intervention trials; mentor a research group.",
+          window: [12, 36],
+          knowledge: [
+            "CONSORT, SPIRIT, CONSORT-AI guidelines",
+            "Pre-registration & registered reports (OSF, ClinicalTrials.gov)",
+            "Adaptive trial designs; Bayesian RCTs",
+            "Research grants (RGC, NIH, ERC), team mentorship, lab ops"
+          ],
+          resources: [
+            { type: "tool", label: "OSF Registries", url: "https://osf.io/registries/" },
+            { type: "book", label: "Sambrook — How to Write a Grant Proposal (or NIH equivalent)", url: "https://www.nih.gov/grants" },
+            { type: "course", label: "EQUATOR Network guidelines", url: "https://www.equator-network.org/" }
+          ],
+          experts: [
+            { name: "Russell Poldrack", aff: "Stanford", why: "Open science leadership" },
+            { name: "Cathy Price", aff: "UCL", why: "Large-scale aphasia cohorts" }
+          ],
+          rationale: "Becoming a professor is a leadership job. Methodological excellence + people leadership = lab that lasts.",
+          method: "Draft a pre-registered protocol for a small tACS+rehab RCT; circulate to mentors for review."
+        }
+      ]
+    }
+  ]
+};
+
+</script>
+<script>
+(function(){
+  const STORAGE_KEY = "langneuro_roadmap_v1";
+  const data = window.ROADMAP;
+
+  // ----- state -----
+  const defaultState = () => {
+    const modules = {};
+    data.pillars.forEach(p => p.modules.forEach(m => {
+      modules[m.id] = {
+        status: "todo",      // todo | doing | done
+        percent: 0,
+        notes: "",
+        resourcesDone: {},
+        lastTouched: null
+      };
+    }));
+    return { modules, log: [], theme: "light", startISO: data.meta.startISO };
+  };
+
+  let state = loadState();
+  function loadState(){
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if(!raw) return defaultState();
+      const parsed = JSON.parse(raw);
+      // merge with defaults to catch new modules
+      const fresh = defaultState();
+      Object.keys(fresh.modules).forEach(id => {
+        if(parsed.modules && parsed.modules[id]) fresh.modules[id] = { ...fresh.modules[id], ...parsed.modules[id] };
+      });
+      fresh.log = parsed.log || [];
+      fresh.theme = parsed.theme || "light";
+      fresh.startISO = parsed.startISO || data.meta.startISO;
+      return fresh;
+    } catch(e){ console.warn("state load failed", e); return defaultState(); }
+  }
+  function saveState(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+
+  // ----- helpers -----
+  function monthsSinceStart(){
+    const start = new Date(state.startISO);
+    const now = new Date();
+    return (now.getFullYear()-start.getFullYear())*12 + (now.getMonth()-start.getMonth()) + (now.getDate()-start.getDate())/30;
+  }
+  function fmtDate(iso){
+    if(!iso) return "—";
+    return new Date(iso).toLocaleDateString("en-GB", {day:"2-digit", month:"short", year:"numeric"});
+  }
+  function todayISO(){ return new Date().toISOString().slice(0,10); }
+
+  function allModules(){
+    const out = [];
+    data.pillars.forEach(p => p.modules.forEach(m => out.push({...m, pillar: p})));
+    return out;
+  }
+  function moduleStatusFromPercent(pct){
+    if(pct >= 100) return "done";
+    if(pct > 0) return "doing";
+    return "todo";
+  }
+  function statusLabel(s){ return s==="done"?"Done":s==="doing"?"In progress":"Not started"; }
+
+  // ----- theme -----
+  function applyTheme(){
+    document.documentElement.setAttribute("data-theme", state.theme || "light");
+  }
+  document.getElementById("theme-toggle").addEventListener("click", () => {
+    state.theme = state.theme === "dark" ? "light" : "dark";
+    saveState(); applyTheme();
+  });
+
+  // ----- view switching -----
+  const tabs = document.querySelectorAll("nav.tabs button");
+  tabs.forEach(b => b.addEventListener("click", () => {
+    tabs.forEach(x => x.classList.remove("active"));
+    b.classList.add("active");
+    const v = b.dataset.view;
+    document.querySelectorAll("main section").forEach(s => s.classList.add("hidden"));
+    document.getElementById("view-"+v).classList.remove("hidden");
+    window.scrollTo(0,0);
+  }));
+
+  // ----- render: overview -----
+  function renderOverview(){
+    document.getElementById("hello-name").textContent = `${data.meta.ownerName} · Language Neuroscience Roadmap`;
+    document.getElementById("ultimate-goal").textContent = data.meta.ultimateGoal;
+    const today = new Date();
+    document.getElementById("today-str").textContent = today.toLocaleDateString("en-GB", {weekday:"long", day:"2-digit", month:"long", year:"numeric"});
+    const m = monthsSinceStart();
+    document.getElementById("month-str").textContent = `Month ${m.toFixed(1)} of ${data.meta.horizonMonths}`;
+
+    // stats
+    const mods = allModules();
+    const percents = mods.map(m => state.modules[m.id].percent);
+    const overall = percents.reduce((a,b)=>a+b,0) / mods.length;
+    document.getElementById("stat-overall").textContent = `${overall.toFixed(0)}%`;
+    document.getElementById("stat-overall-sub").textContent = `${mods.length} modules total`;
+    const doingN = mods.filter(m => state.modules[m.id].percent>0 && state.modules[m.id].percent<100).length;
+    const doneN = mods.filter(m => state.modules[m.id].percent>=100).length;
+    document.getElementById("stat-doing").textContent = doingN;
+    document.getElementById("stat-doing-sub").textContent = "active right now";
+    document.getElementById("stat-done").textContent = doneN;
+    document.getElementById("stat-done-sub").textContent = "fully completed";
+    const weekAgo = new Date(Date.now() - 7*86400000);
+    const hours7 = state.log.filter(e => new Date(e.date) >= weekAgo).reduce((s,e)=>s+Number(e.hours||0),0);
+    document.getElementById("stat-hours").textContent = hours7.toFixed(1);
+
+    // pillar progress
+    const ppl = document.getElementById("pillar-progress-list");
+    ppl.innerHTML = "";
+    data.pillars.forEach(p => {
+      const pcts = p.modules.map(m => state.modules[m.id].percent);
+      const avg = pcts.reduce((a,b)=>a+b,0)/pcts.length;
+      const row = document.createElement("div");
+      row.style.marginBottom = "12px";
+      row.innerHTML = `
+        <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:4px">
+          <div style="font-family:var(--serif); font-weight:600; font-size:14px"><span style="display:inline-block; width:10px; height:10px; border-radius:2px; background:${p.color}; margin-right:8px"></span>${p.name}</div>
+          <div style="font-family:var(--mono); font-size:12px; color:var(--text-mute)">${avg.toFixed(0)}% · ${p.modules.length} modules</div>
+        </div>
+        <div style="height:6px; background:var(--surface-2); border-radius:3px; overflow:hidden">
+          <div style="height:100%; background:${p.color}; width:${avg}%; transition:width .3s ease"></div>
+        </div>
+        <div style="color:var(--text-mute); font-size:12px; margin-top:6px">${p.summary}</div>
+      `;
+      ppl.appendChild(row);
+    });
+
+    // next modules: in-window AND not done, ordered by window start
+    const m_now = monthsSinceStart();
+    const nx = mods
+      .filter(m => state.modules[m.id].percent < 100)
+      .filter(m => m_now >= m.window[0] - 1 && m_now <= m.window[1])
+      .sort((a,b) => a.window[0] - b.window[0]);
+    const nxc = document.getElementById("next-modules");
+    nxc.innerHTML = "";
+    if(nx.length === 0){
+      nxc.innerHTML = `<div style="color:var(--text-mute); font-size:13px">No modules in window right now — open the Pillars view to plan ahead.</div>`;
+    } else {
+      nx.slice(0, 6).forEach(m => {
+        const st = state.modules[m.id];
+        const pillar = m.pillar;
+        const div = document.createElement("div");
+        div.style.cssText = "padding:10px 12px; border:1px solid var(--border); border-radius:var(--radius-sm); margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; gap:12px";
+        div.innerHTML = `
+          <div style="flex:1; min-width:0">
+            <div style="font-weight:500; font-size:13px">${m.title}</div>
+            <div style="color:var(--text-mute); font-size:11px; margin-top:2px"><span style="color:${pillar.color}">●</span> ${pillar.name} · months ${m.window[0]}–${m.window[1]}</div>
+          </div>
+          <div style="font-family:var(--mono); font-size:12px; color:var(--text-mute)">${st.percent}%</div>
+          <span class="status-pill ${st.status}">${statusLabel(st.status)}</span>
+        `;
+        nxc.appendChild(div);
+      });
+    }
+  }
+
+  // ----- render: pillars -----
+  function renderPillars(){
+    const c = document.getElementById("pillars-container");
+    c.innerHTML = "";
+    data.pillars.forEach(p => {
+      const pcts = p.modules.map(m => state.modules[m.id].percent);
+      const avg = pcts.reduce((a,b)=>a+b,0)/pcts.length;
+      const card = document.createElement("div");
+      card.className = "card pillar-card";
+      card.style.borderLeftColor = p.color;
+      card.innerHTML = `
+        <div class="pillar-head">
+          <h2><span class="pillar-tag">${p.id}</span>${p.name}</h2>
+          <div style="font-family:var(--mono); font-size:12px; color:var(--text-mute)">${avg.toFixed(0)}% · ${p.modules.length} modules</div>
+        </div>
+        <div class="pillar-summary">${p.summary}</div>
+        <div class="pillar-progress"><div class="bar" style="width:${avg}%; background:${p.color}"></div></div>
+        <div class="modules-list"></div>
+      `;
+      const ml = card.querySelector(".modules-list");
+      p.modules.forEach(m => ml.appendChild(buildModuleNode(m, p)));
+      c.appendChild(card);
+    });
+  }
+
+  function buildModuleNode(m, p){
+    const st = state.modules[m.id];
+    const node = document.createElement("div");
+    node.className = "module";
+    node.dataset.id = m.id;
+    const resHTML = m.resources.map((r,i) => {
+      const checked = st.resourcesDone[i] ? "checked" : "";
+      return `<label class="res-item">
+        <input type="checkbox" data-res="${i}" ${checked} />
+        <span class="type-tag">${r.type}</span>
+        <a href="${r.url}" target="_blank" rel="noopener">${r.label}</a>
+      </label>`;
+    }).join("");
+    const expHTML = m.experts.map(e =>
+      `<div class="exp-item"><strong>${e.name}</strong> <span class="aff">· ${e.aff}</span><br/><span style="font-size:12px">${e.why}</span></div>`
+    ).join("");
+    const knowHTML = `<ul>${m.knowledge.map(k=>`<li>${k}</li>`).join("")}</ul>`;
+
+    node.innerHTML = `
+      <div class="module-head">
+        <div class="module-title">
+          <span class="chev">▶</span>
+          <h3>${m.title}</h3>
+        </div>
+        <div class="module-meta">
+          <span style="font-family:var(--mono); font-size:11px">m${m.window[0]}–${m.window[1]}</span>
+          <span class="pct-display">${st.percent}%</span>
+          <span class="status-pill ${st.status}">${statusLabel(st.status)}</span>
+        </div>
+      </div>
+      <div class="module-body">
+        <div class="field">
+          <div class="field-label">Goal</div>
+          <div class="field-value">${m.goal}</div>
+        </div>
+        <div class="field">
+          <div class="field-label">Why this matters</div>
+          <div class="field-value" style="font-style:italic; color:var(--text-soft)">${m.rationale}</div>
+        </div>
+        <div class="grid-2">
+          <div class="field">
+            <div class="field-label">Knowledge &amp; skills (what)</div>
+            <div class="field-value">${knowHTML}</div>
+          </div>
+          <div class="field">
+            <div class="field-label">Method (how)</div>
+            <div class="field-value">${m.method}</div>
+          </div>
+        </div>
+        <div class="grid-2">
+          <div class="field">
+            <div class="field-label">Resources (where)</div>
+            <div class="res-list">${resHTML}</div>
+          </div>
+          <div class="field">
+            <div class="field-label">Experts (who)</div>
+            <div class="exp-list">${expHTML}</div>
+          </div>
+        </div>
+        <div class="module-controls">
+          <div class="control-row">
+            <label>Status</label>
+            <select class="status-select">
+              <option value="todo" ${st.status==="todo"?"selected":""}>Not started</option>
+              <option value="doing" ${st.status==="doing"?"selected":""}>In progress</option>
+              <option value="done" ${st.status==="done"?"selected":""}>Done</option>
+            </select>
+            <label style="min-width:55px">Progress</label>
+            <input type="range" class="pct-slider" min="0" max="100" step="5" value="${st.percent}" />
+            <span class="pct-display">${st.percent}%</span>
+          </div>
+          <div>
+            <div class="field-label" style="margin-top:6px">Personal notes</div>
+            <textarea class="notes-input" placeholder="What clicked, what's still confusing, papers you want to return to…">${st.notes||""}</textarea>
+          </div>
+          <div style="font-size:11px; color:var(--text-mute); margin-top:6px">Last touched: ${fmtDate(st.lastTouched)}</div>
+        </div>
+      </div>
+    `;
+
+    // expand/collapse
+    node.querySelector(".module-head").addEventListener("click", () => node.classList.toggle("open"));
+
+    // status select
+    node.querySelector(".status-select").addEventListener("change", (e) => {
+      st.status = e.target.value;
+      if(st.status === "done" && st.percent < 100) st.percent = 100;
+      if(st.status === "todo") st.percent = 0;
+      st.lastTouched = todayISO();
+      saveState(); renderAll();
+    });
+
+    // percent slider
+    const slider = node.querySelector(".pct-slider");
+    const pctDisp = node.querySelectorAll(".pct-display");
+    slider.addEventListener("input", (e) => {
+      st.percent = Number(e.target.value);
+      st.status = moduleStatusFromPercent(st.percent);
+      pctDisp.forEach(d => d.textContent = `${st.percent}%`);
+    });
+    slider.addEventListener("change", () => {
+      st.lastTouched = todayISO();
+      saveState(); renderAll();
+    });
+
+    // notes
+    const notes = node.querySelector(".notes-input");
+    let notesTimer;
+    notes.addEventListener("input", (e) => {
+      st.notes = e.target.value;
+      clearTimeout(notesTimer);
+      notesTimer = setTimeout(() => { st.lastTouched = todayISO(); saveState(); }, 400);
+    });
+
+    // resource checkboxes
+    node.querySelectorAll('input[type=checkbox][data-res]').forEach(cb => {
+      cb.addEventListener("change", (e) => {
+        const idx = e.target.dataset.res;
+        st.resourcesDone[idx] = e.target.checked;
+        st.lastTouched = todayISO();
+        saveState();
+      });
+    });
+
+    return node;
+  }
+
+  // ----- render: timeline -----
+  function renderTimeline(){
+    const c = document.getElementById("timeline");
+    c.innerHTML = "";
+    const H = data.meta.horizonMonths;
+    // axis
+    const axis = document.createElement("div");
+    axis.className = "timeline-axis";
+    const months = Array.from({length: H}, (_,i) => `<span>${i%6===0?("M"+i):""}</span>`).join("");
+    axis.innerHTML = `<div></div><div class="timeline-months">${months}</div>`;
+    c.appendChild(axis);
+
+    const nowM = monthsSinceStart();
+    const nowPct = Math.max(0, Math.min(H, nowM)) / H * 100;
+
+    data.pillars.forEach(p => {
+      p.modules.forEach(m => {
+        const st = state.modules[m.id];
+        const row = document.createElement("div");
+        row.className = "timeline-row";
+        const leftPct = (m.window[0] / H) * 100;
+        const widthPct = ((m.window[1] - m.window[0]) / H) * 100;
+        row.innerHTML = `
+          <div class="timeline-label" title="${m.title}"><span style="color:${p.color}">●</span> ${m.title}</div>
+          <div class="timeline-track">
+            <div class="timeline-bar" style="left:${leftPct}%; width:${widthPct}%; background:${p.color}">
+              ${st.percent>0 ? `<span style="background:rgba(255,255,255,0.35); position:absolute; left:0; top:0; bottom:0; width:${st.percent}%"></span>`:""}
+              <span style="position:relative; z-index:1">${st.percent}%</span>
+            </div>
+            <div class="timeline-now" style="left:${nowPct}%"></div>
+          </div>
+        `;
+        c.appendChild(row);
+      });
+    });
+  }
+
+  // ----- render: people -----
+  function renderPeople(){
+    const c = document.getElementById("people-container");
+    c.innerHTML = "";
+    data.pillars.forEach(p => {
+      const header = document.createElement("div");
+      header.className = "card";
+      header.innerHTML = `<h2 style="margin-bottom:12px"><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:${p.color};margin-right:8px"></span>${p.name}</h2><div class="people-grid"></div>`;
+      const grid = header.querySelector(".people-grid");
+      const seen = new Set();
+      p.modules.forEach(m => m.experts.forEach(e => {
+        const key = e.name;
+        if(seen.has(key)) return;
+        seen.add(key);
+        const card = document.createElement("div");
+        card.className = "person-card";
+        card.innerHTML = `<div class="nm">${e.name}</div><div class="af">${e.aff}</div><div class="wy">${e.why}</div><div class="pillar-mark">${m.id} · ${m.title}</div>`;
+        grid.appendChild(card);
+      }));
+      c.appendChild(header);
+    });
+  }
+
+  // ----- render: log -----
+  function renderLog(){
+    const sel = document.getElementById("log-module");
+    sel.innerHTML = "";
+    data.pillars.forEach(p => {
+      const og = document.createElement("optgroup");
+      og.label = p.name;
+      p.modules.forEach(m => {
+        const o = document.createElement("option");
+        o.value = m.id; o.textContent = m.title;
+        og.appendChild(o);
+      });
+      sel.appendChild(og);
+    });
+    if(!document.getElementById("log-date").value) document.getElementById("log-date").value = todayISO();
+
+    const tbody = document.querySelector("#log-table tbody");
+    tbody.innerHTML = "";
+    const sorted = [...state.log].sort((a,b)=> b.date.localeCompare(a.date));
+    sorted.forEach((e, idx) => {
+      const realIdx = state.log.indexOf(e);
+      const mod = allModules().find(m => m.id === e.moduleId);
+      const tr = document.createElement("tr");
+      tr.innerHTML = `<td style="font-family:var(--mono); font-size:12px; color:var(--text-mute)">${e.date}</td>
+        <td>${mod ? mod.title : "(removed)"}</td>
+        <td style="font-family:var(--mono)">${Number(e.hours).toFixed(2)}</td>
+        <td style="color:var(--text-soft)">${e.note||""}</td>
+        <td><button class="del-btn" data-idx="${realIdx}">delete</button></td>`;
+      tbody.appendChild(tr);
+    });
+    tbody.querySelectorAll(".del-btn").forEach(b => b.addEventListener("click", (e) => {
+      const i = Number(e.target.dataset.idx);
+      state.log.splice(i,1);
+      saveState(); renderAll();
+    }));
+
+    // hours chart — last 12 weeks
+    const chart = document.getElementById("hours-chart");
+    chart.innerHTML = "";
+    const weeks = 12;
+    const now = new Date();
+    const buckets = Array.from({length: weeks}, () => 0);
+    state.log.forEach(e => {
+      const d = new Date(e.date);
+      const diffDays = Math.floor((now - d) / 86400000);
+      const w = Math.floor(diffDays / 7);
+      if(w >= 0 && w < weeks) buckets[weeks-1-w] += Number(e.hours||0);
+    });
+    const maxH = Math.max(...buckets, 1);
+    buckets.forEach((h,i) => {
+      const wkAgo = weeks-1-i;
+      const bar = document.createElement("div");
+      bar.className = "hours-bar";
+      bar.style.height = `${(h/maxH)*100}%`;
+      bar.dataset.tooltip = `${h.toFixed(1)}h · ${wkAgo===0?"this week":wkAgo+" wk ago"}`;
+      chart.appendChild(bar);
+    });
+  }
+
+  document.getElementById("log-add").addEventListener("click", () => {
+    const date = document.getElementById("log-date").value || todayISO();
+    const moduleId = document.getElementById("log-module").value;
+    const hours = Number(document.getElementById("log-hours").value || 0);
+    const note = document.getElementById("log-note").value || "";
+    if(!moduleId || hours <= 0) return;
+    state.log.push({ date, moduleId, hours, note });
+    // bump module last-touched
+    if(state.modules[moduleId]) state.modules[moduleId].lastTouched = date;
+    document.getElementById("log-note").value = "";
+    saveState(); renderAll();
+  });
+
+  // ----- render: principles -----
+  function renderPrinciples(){
+    document.getElementById("principles-goal").textContent = data.meta.ultimateGoal;
+    const ol = document.getElementById("principles-list");
+    ol.innerHTML = data.meta.firstPrinciples.map(p => `<li>${p}</li>`).join("");
+  }
+
+  // ----- export / import / reset -----
+  document.getElementById("export-btn").addEventListener("click", () => {
+    const blob = new Blob([JSON.stringify(state, null, 2)], {type: "application/json"});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url; a.download = `langneuro-progress-${todayISO()}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  });
+  document.getElementById("import-btn").addEventListener("click", () => document.getElementById("import-file").click());
+  document.getElementById("import-file").addEventListener("change", (e) => {
+    const f = e.target.files[0];
+    if(!f) return;
+    const rd = new FileReader();
+    rd.onload = () => {
+      try {
+        const parsed = JSON.parse(rd.result);
+        if(!parsed.modules) throw new Error("invalid file");
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(parsed));
+        state = loadState();
+        renderAll();
+        alert("Progress imported successfully.");
+      } catch(err){ alert("Import failed: " + err.message); }
+    };
+    rd.readAsText(f);
+  });
+  document.getElementById("reset-btn").addEventListener("click", () => {
+    if(confirm("This will erase all progress, notes, and log entries. Continue?")){
+      localStorage.removeItem(STORAGE_KEY);
+      state = loadState();
+      renderAll();
+    }
+  });
+
+  // ----- master render -----
+  function renderAll(){
+    applyTheme();
+    renderOverview();
+    renderPillars();
+    renderTimeline();
+    renderPeople();
+    renderLog();
+    renderPrinciples();
+  }
+  renderAll();
+})();
+</script>
+</body>
+</html>
