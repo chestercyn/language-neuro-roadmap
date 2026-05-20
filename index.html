@@ -296,6 +296,38 @@
     font-family: var(--mono); font-size: 9px; color: var(--accent, #6366f1);
     border: 1px solid var(--border); padding: 1px 5px; border-radius: 3px; text-transform: uppercase;
   }
+  /* Criteria badges + inline rationale */
+  .res-item.active { display: block; padding: 6px 0; }
+  .res-item.active .res-row { display: flex; align-items: center; gap: 8px; }
+  .res-item.active .res-row a { flex: 1; min-width: 0; word-break: break-word; }
+  .res-badges { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; padding-left: 2px; }
+  .res-badges .badge {
+    font-family: var(--mono); font-size: 10px; padding: 1px 6px; border-radius: 3px;
+    border: 1px solid var(--border); background: var(--surface-2, var(--surface)); color: var(--text-soft);
+    letter-spacing: 0.02em;
+  }
+  .res-badges .badge b { color: var(--text); font-weight: 600; letter-spacing: 0.04em; margin-left: 3px; }
+  .res-badges .badge.trust b { color: #2563eb; }
+  .res-badges .badge.impact b { color: #db2777; }
+  .res-badges .badge.level { text-transform: capitalize; }
+  .res-badges .badge.lvl-foundational { border-color: #16a34a55; color: #16a34a; }
+  .res-badges .badge.lvl-intermediate { border-color: #d9770655; color: #d97706; }
+  .res-badges .badge.lvl-advanced { border-color: #7c3aed55; color: #7c3aed; }
+  .res-badges .complement-note {
+    font-family: var(--mono); font-size: 10px; padding: 1px 6px; border-radius: 3px;
+    border: 1px dashed var(--border);
+  }
+  .res-badges .complement-note.fresh { color: #16a34a; border-color: #16a34a55; }
+  .res-badges .complement-note.partial { color: #d97706; border-color: #d9770655; }
+  .res-badges .complement-note.overlap { color: #dc2626; border-color: #dc262655; }
+  .res-rationale {
+    font-size: 11.5px; font-style: italic; color: var(--text-soft);
+    margin-top: 4px; padding: 4px 8px;
+    border-left: 2px solid var(--accent, #6366f1);
+    background: linear-gradient(to right, rgba(99,102,241,0.05), transparent);
+    line-height: 1.45;
+  }
+  .res-rationale::first-letter { color: var(--accent, #6366f1); font-weight: 600; }
   .res-done-btn, .res-restore-btn {
     border: 1px solid var(--border); background: var(--surface); color: var(--text);
     font-size: 11px; padding: 2px 8px; border-radius: 4px; cursor: pointer;
@@ -1155,6 +1187,535 @@ window.ROADMAP = {
 
 </script>
 <script>
+// Per-source metadata — hand-curated topic tags and one-line rationale.
+// Trust + impact are derived automatically from URL/title; these add the
+// fit/rationale layer the auto-tagger can't infer reliably.
+// Schema: url -> { tags: [string...], level: "foundational"|"intermediate"|"advanced", rationale: string }
+window.SOURCE_META = {
+  // ===== P1-M1: Linguistics & psycholinguistics primer =====
+  "https://stevenpinker.com/publications/language-instinct": {
+    tags: ["linguistics","psycholinguistics","foundations","theory"], level: "foundational",
+    rationale: "Accessible, paradigm-defining introduction to language as biological capacity — the right entry point for the linguistic vocabulary you'll need before neural modelling."
+  },
+  "https://global.oup.com/academic/product/foundations-of-language-9780199264377": {
+    tags: ["linguistics","syntax","semantics","architecture"], level: "intermediate",
+    rationale: "Jackendoff's parallel-architecture framework explicitly bridges generative grammar to cognitive neuroscience — directly useful for designing language-network experiments."
+  },
+  "https://www.routledge.com/The-Psychology-of-Language-From-Data-to-Theory/Harley/p/book/9781848720893": {
+    tags: ["psycholinguistics","textbook","comprehension","production"], level: "foundational",
+    rationale: "Standard graduate textbook covering experimental psycholinguistics methods you'll need to interpret behavioural data from aphasia and discourse studies."
+  },
+  "https://ocw.mit.edu/courses/9-59j-lab-in-psycholinguistics-spring-2017/": {
+    tags: ["psycholinguistics","experiment-design","methods","course"], level: "intermediate",
+    rationale: "Free MIT lab course teaches how to design and run psycholinguistic experiments rigorously — a methods foundation most neuroscience curricula skip."
+  },
+  "https://direct.mit.edu/books/monograph/4300/SpeakingFrom-Intention-to-Articulation": {
+    tags: ["production","levelt","speech","phonological-encoding"], level: "intermediate",
+    rationale: "Canonical speech-production model. Essential for modelling discourse breakdown patterns in aphasia at the level of conceptualisation, lexicalisation, and articulation."
+  },
+  "https://psycnet.apa.org/record/1986-30586-001": {
+    tags: ["production","interactive-activation","lexical-access","computational"], level: "intermediate",
+    rationale: "Dell's interactive-activation model is the dominant computational account of naming errors — central to interpreting aphasic word-finding deficits mechanistically."
+  },
+  "https://www.science.org/doi/10.1126/science.274.5294.1926": {
+    tags: ["statistical-learning","acquisition","infants","prediction"], level: "foundational",
+    rationale: "Seminal Science paper proving infants extract word boundaries from transition probabilities — the empirical foundation for predictive accounts of language."
+  },
+  "https://global.oup.com/academic/product/constructions-at-work-9780199268528": {
+    tags: ["construction-grammar","usage-based","syntax","alternative-theory"], level: "intermediate",
+    rationale: "Goldberg's usage-based alternative to generative grammar; critical counterweight you need to debate-proof your linguistic claims in papers."
+  },
+
+  // ===== P1-M2: Cognitive neuroscience of language — dual-stream =====
+  "https://mitpress.mit.edu/9780262036924/": {
+    tags: ["language-network","review","friederici","syntax-network"], level: "intermediate",
+    rationale: "Friederici's synthesis of two decades of language-network work; gives the full anatomical and developmental picture in one volume."
+  },
+  "https://www.nature.com/articles/nrn2113": {
+    tags: ["dual-stream","speech","auditory","model"], level: "foundational",
+    rationale: "The single most-cited modern model of language cortex (>10,000 citations). Every later paper either extends or contradicts it; you must know it cold."
+  },
+  "https://pmc.ncbi.nlm.nih.gov/articles/PMC3709422/": {
+    tags: ["MUC","unification","broca","integration"], level: "intermediate",
+    rationale: "Hagoort's MUC framework is the dominant alternative to dual-stream; emphasises unification operations critical for the connectomics view you're building."
+  },
+  "https://www.nature.com/articles/s41583-024-00802-4": {
+    tags: ["language-network","fedorenko","fmri","domain-specificity"], level: "advanced",
+    rationale: "2024 reframing of the language network as a natural kind — the current state-of-the-art frame you'll need to cite in any new fMRI/EEG paper."
+  },
+  "https://journals.physiology.org/doi/full/10.1152/physrev.00006.2011": {
+    tags: ["review","syntax","broca","comprehensive"], level: "intermediate",
+    rationale: "Physiological Reviews-tier deep dive; the single most comprehensive review of language neurobiology to date. Use as canonical citation source."
+  },
+  "https://www.cell.com/trends/cognitive-sciences/fulltext/S1364-6613(14)00029-X": {
+    tags: ["language-network","domain-specificity","fedorenko","critique"], level: "intermediate",
+    rationale: "Sharpens the debate over whether language regions are language-specific vs. domain-general — a question your aphasia data can directly inform."
+  },
+  "https://onlinelibrary.wiley.com/doi/10.1002/ana.20319": {
+    tags: ["tractography","arcuate","anatomy","DWI"], level: "intermediate",
+    rationale: "Catani's atlas of perisylvian white matter — the anatomical substrate underlying every connectivity claim you'll make."
+  },
+  "https://www.cell.com/trends/cognitive-sciences/fulltext/S1364-6613(05)00208-2": {
+    tags: ["broca","binding","integration","unification"], level: "intermediate",
+    rationale: "Hagoort's reconceptualisation of Broca's area as a binding hub; introduces the network logic your connectomics work will formalise."
+  },
+
+  // ===== P1-M3: Computational & Bayesian brain =====
+  "https://mitpress.mit.edu/9780262045353/active-inference/": {
+    tags: ["active-inference","free-energy","textbook","computational"], level: "advanced",
+    rationale: "The definitive textbook on active inference; open-access, includes worked examples critical for your computational modelling pillar."
+  },
+  "https://www.nature.com/articles/nrn2787": {
+    tags: ["free-energy","friston","unified-theory","computational"], level: "advanced",
+    rationale: "Friston's flagship Nature Reviews Neuroscience paper on FEP — the most-cited unifying framework in computational neuroscience this decade."
+  },
+  "https://journals.sagepub.com/doi/10.1177/0963721415570732": {
+    tags: ["predictive-coding","language","words","top-down"], level: "intermediate",
+    rationale: "Direct bridge from predictive coding to language; Lupyan & Clark articulate the strongest argument for treating language as fundamentally predictive."
+  },
+  "https://compneuro.neuromatch.io/": {
+    tags: ["course","computational","python","tutorials"], level: "intermediate",
+    rationale: "Free, peer-developed computational neuroscience curriculum from Neuromatch — the most rigorous open course available; pair it with the Active Inference book."
+  },
+  "https://www.nature.com/articles/nn0199_79": {
+    tags: ["predictive-coding","rao-ballard","vision","seminal"], level: "intermediate",
+    rationale: "The Rao-Ballard 1999 paper is where modern predictive coding starts; >7,000 citations. Every later predictive-coding paper cites it — read it once carefully."
+  },
+  "https://www.cambridge.org/core/journals/behavioral-and-brain-sciences/article/abs/whatever-next-predictive-brains-situated-agents-and-the-future-of-cognitive-science/33542C736E17E3D1D44E8D03BE5F4CD9": {
+    tags: ["predictive-coding","philosophy","clark","big-picture"], level: "intermediate",
+    rationale: "Clark's BBS target article (>3,000 cites) sets the philosophical agenda for predictive-mind theories — useful framing for your discussion sections."
+  },
+  "https://github.com/infer-actively/pymdp": {
+    tags: ["tool","python","active-inference","implementation"], level: "advanced",
+    rationale: "Working Python implementation of active inference; the fastest way from theory to a runnable toy model you can extend with linguistic priors."
+  },
+  "https://www.cell.com/trends/cognitive-sciences/fulltext/S1364-6613(18)30126-1": {
+    tags: ["predictive-coding","expectation","perception","review"], level: "intermediate",
+    rationale: "Best modern review of empirical evidence for and against predictive coding in human perception — calibrates how strong your computational claims should be."
+  },
+
+  // ===== P1-M4: Advanced statistics =====
+  "https://xcelab.net/rm/": {
+    tags: ["bayesian","textbook","mcelreath","r"], level: "intermediate",
+    rationale: "McElreath's book + video lectures are universally regarded as the best Bayesian onboarding for working scientists; transforms how you think about inference."
+  },
+  "http://www.stat.columbia.edu/~gelman/book/": {
+    tags: ["bayesian","reference","gelman","hierarchical"], level: "advanced",
+    rationale: "The Bayesian Data Analysis reference. Treat as encyclopedia rather than read-through — every hierarchical model you build will trace back to a chapter here."
+  },
+  "https://bookdown.org/content/4857/": {
+    tags: ["bayesian","brms","tidyverse","translation"], level: "intermediate",
+    rationale: "Translates McElreath's examples into brms/tidyverse — the fastest path from textbook to production Bayesian analyses in your own data."
+  },
+  "https://www.sciencedirect.com/science/article/pii/S0165027007001707": {
+    tags: ["statistics","EEG","permutation","cluster"], level: "intermediate",
+    rationale: "The Maris & Oostenveld cluster-based permutation paper (>10,000 cites) — the field's default solution to multiple-comparisons in EEG/MEG that you must master."
+  },
+  "https://paul-buerkner.github.io/brms/": {
+    tags: ["tool","r","stan","bayesian"], level: "intermediate",
+    rationale: "brms is the production-grade Bayesian regression toolkit you'll use weekly; documentation includes vignettes covering 95% of neuroscience use-cases."
+  },
+  "http://bayes.cs.ucla.edu/WHY/": {
+    tags: ["causal-inference","pearl","DAG","accessible"], level: "intermediate",
+    rationale: "Pearl's lay introduction to causal inference; essential framing for any intervention/lesion study where correlation-causation slippage is the central pitfall."
+  },
+  "https://journals.sagepub.com/doi/10.1177/2515245918771304": {
+    tags: ["bayesian","decision","HDI","interpretation"], level: "intermediate",
+    rationale: "Kruschke's pragmatic guide to making decisions from Bayesian estimates — what to do once you have a posterior, the question Bayes textbooks skip."
+  },
+  "https://www.nature.com/articles/nn.2886": {
+    tags: ["statistics","interactions","methodological","cautionary"], level: "foundational",
+    rationale: "Nieuwenhuis et al. show 50% of neuroscience papers misanalyse interactions. Read once, never make the mistake — high-impact methodological warning."
+  },
+
+  // ===== P2-M1: EEG source localisation & MEG =====
+  "https://mne.tools/stable/auto_tutorials/index.html": {
+    tags: ["tool","python","MEG","EEG","tutorial"], level: "intermediate",
+    rationale: "MNE-Python is the field-standard open-source toolkit for M/EEG analysis; tutorials cover the full pipeline from raw to source-space connectivity."
+  },
+  "https://www.fieldtriptoolbox.org/tutorial/": {
+    tags: ["tool","matlab","MEG","EEG","tutorial"], level: "intermediate",
+    rationale: "FieldTrip is the MATLAB counterpart you already know; tutorials provide reference implementations for every connectivity and source-localisation method."
+  },
+  "https://cuttingeeg.org/": {
+    tags: ["workshop","community","methods","networking"], level: "intermediate",
+    rationale: "CuttingEEG/CuttingGardens hands-on workshops let you learn cutting-edge methods directly from developers — invaluable for source-space techniques rarely documented elsewhere."
+  },
+  "https://www.sciencedirect.com/science/article/pii/S1053811912009895": {
+    tags: ["MEG","guidelines","gross","best-practice"], level: "intermediate",
+    rationale: "Gross et al.'s 'Good practice for MEG' is the consensus methods reference; cite it whenever you describe an M/EEG pipeline."
+  },
+  "https://global.oup.com/academic/product/meg-9780195307238": {
+    tags: ["MEG","textbook","methods","comprehensive"], level: "intermediate",
+    rationale: "The MEG textbook by Hansen, Kringelbach & Salmelin; covers physics, acquisition, and analysis — essential reference if MEG enters your toolkit."
+  },
+  "https://ieeexplore.ieee.org/document/623056": {
+    tags: ["beamformer","LCMV","source-localisation","seminal"], level: "advanced",
+    rationale: "Van Veen's original LCMV beamformer paper; understanding the math here is non-negotiable for defending source-space connectivity claims."
+  },
+  "https://www.nature.com/articles/nn.4504": {
+    tags: ["MEG","review","baillet","methods"], level: "intermediate",
+    rationale: "Baillet's Nature Neuroscience review on MEG for brain electrophysiology — the best single-paper orientation to what MEG can and cannot do."
+  },
+  "https://neuroimage.usc.edu/brainstorm/": {
+    tags: ["tool","GUI","MEG","EEG"], level: "foundational",
+    rationale: "Brainstorm offers a GUI-based alternative to MNE/FieldTrip — useful for collaborators less comfortable with scripting and for rapid exploration."
+  },
+
+  // ===== P2-M2: fMRI & DWI =====
+  "https://fmriprep.org/": {
+    tags: ["tool","fMRI","BIDS","preprocessing"], level: "intermediate",
+    rationale: "fMRIPrep is the consensus reproducible-preprocessing tool; its use makes your fMRI analyses publishable in modern open-science venues without methods objections."
+  },
+  "https://www.mrtrix.org/": {
+    tags: ["tool","DWI","tractography","CSD"], level: "advanced",
+    rationale: "MRtrix3 is the gold-standard tractography toolkit — needed for any language-tract analysis (arcuate, IFOF, ILF) you publish."
+  },
+  "https://andysbrainbook.readthedocs.io/": {
+    tags: ["course","fMRI","DWI","free"], level: "foundational",
+    rationale: "Andy's Brain Book is the most beginner-friendly free fMRI/DWI course available; ideal scaffolding before tackling the formal methods papers."
+  },
+  "https://pubmed.ncbi.nlm.nih.gov/20410363/": {
+    tags: ["localiser","fMRI","fedorenko","language-network"], level: "intermediate",
+    rationale: "Fedorenko's functional language localiser is the methodological standard for isolating language regions per-subject — adopt it to align your work with the dominant paradigm."
+  },
+  "https://www.cambridge.org/core/books/handbook-of-functional-mri-data-analysis/8EDF966C65811FCCC306F7C916228529": {
+    tags: ["fMRI","textbook","statistics","analysis"], level: "intermediate",
+    rationale: "Poldrack et al.'s fMRI handbook — the most authoritative single reference for statistical analysis of BOLD data; covers what newer pipelines assume you know."
+  },
+  "https://www.sciencedirect.com/science/article/pii/S0010945208701433": {
+    tags: ["atlas","DWI","tractography","language-tracts"], level: "intermediate",
+    rationale: "Catani & Thiebaut de Schotten's DWI atlas (>3,000 cites) is the reference anatomy for the tracts every aphasia paper discusses."
+  },
+  "https://qsiprep.readthedocs.io/": {
+    tags: ["tool","DWI","preprocessing","BIDS"], level: "advanced",
+    rationale: "QSIPrep brings fMRIPrep's reproducibility ethos to diffusion data — adopt for any DWI work intended for high-impact journals or open data sharing."
+  },
+  "https://www.nature.com/articles/s41592-018-0235-4": {
+    tags: ["fMRIPrep","methods","reproducibility","esteban"], level: "intermediate",
+    rationale: "The Nature Methods paper introducing fMRIPrep; cite it to justify your preprocessing choices in any methods section."
+  },
+
+  // ===== P2-M3: Intracranial recordings =====
+  "https://www.nature.com/articles/nature11020": {
+    tags: ["ECoG","attention","speech","mesgarani-chang"], level: "advanced",
+    rationale: "Mesgarani & Chang's Nature paper showing ECoG can decode attended speech — landmark demonstration that scalp findings have intracranial validity."
+  },
+  "https://www.nature.com/articles/s41593-022-01026-4": {
+    tags: ["ECoG","LLM","goldstein","prediction"], level: "advanced",
+    rationale: "Goldstein et al.'s ECoG-LLM alignment paper is the most cited recent demonstration of computational principles shared between human cortex and language models."
+  },
+  "https://dandiarchive.org/": {
+    tags: ["dataset","open-data","ECoG","sharing"], level: "intermediate",
+    rationale: "DANDI hosts open neurophysiology datasets including ECoG; the practical way to develop intracranial analysis chops without recording your own data."
+  },
+  "https://www.nature.com/articles/nature11911": {
+    tags: ["ECoG","speech-motor","chang","seminal"], level: "advanced",
+    rationale: "Bouchard, Chang et al.'s map of sensorimotor cortex for speech production — foundational paper for any speech-decoding work."
+  },
+  "https://www.nature.com/articles/s41586-019-1119-1": {
+    tags: ["BCI","speech-synthesis","ECoG","translation"], level: "advanced",
+    rationale: "Anumanchipalli et al.'s speech-synthesis-from-cortex demonstration — points to where BCI for aphasia rehabilitation may go in the next decade."
+  },
+  "https://academic.oup.com/brain/article/121/12/2271/325488": {
+    tags: ["ECoG","high-gamma","crone","biomarker"], level: "intermediate",
+    rationale: "Crone et al. established high-gamma as the functional cortical mapping signal; every later ECoG language paper relies on this finding."
+  },
+  "https://www.cell.com/current-biology/fulltext/S0960-9822(18)30461-X": {
+    tags: ["ECoG","temporal-lobe","onset-sustained","auditory"], level: "advanced",
+    rationale: "Hamilton et al.'s spatial map of speech responses in human temporal lobe — modern complement to Mesgarani & Chang's auditory cortex work."
+  },
+
+  // ===== P3-M1: Graph theory & network neuroscience =====
+  "https://shop.elsevier.com/books/fundamentals-of-brain-network-analysis/fornito/978-0-12-407908-3": {
+    tags: ["textbook","graph-theory","network-neuroscience","reference"], level: "intermediate",
+    rationale: "Fornito, Zalesky & Bullmore's textbook is the canonical reference for brain network analysis; covers everything from basic metrics to advanced techniques."
+  },
+  "https://mitpress.mit.edu/9780262528986/networks-of-the-brain/": {
+    tags: ["textbook","sporns","network-neuroscience","conceptual"], level: "intermediate",
+    rationale: "Sporns' Networks of the Brain articulates the conceptual case for connectomics — read it once for framing, not technique."
+  },
+  "https://www.nature.com/articles/ncomms9414": {
+    tags: ["controllability","control-theory","bassett","structural"], level: "advanced",
+    rationale: "Gu et al.'s controllability paper introduces network control theory to brain networks — directly relevant to your neuromodulation work."
+  },
+  "https://sites.google.com/site/bctnet/": {
+    tags: ["tool","matlab","graph-theory","BCT"], level: "intermediate",
+    rationale: "Brain Connectivity Toolbox is the standard MATLAB toolkit for network metrics — every published graph analysis from MATLAB rests on it."
+  },
+  "https://www.sciencedirect.com/science/article/pii/S105381190901074X": {
+    tags: ["graph-theory","methods","rubinov-sporns","metrics"], level: "intermediate",
+    rationale: "Rubinov & Sporns' methods paper (>8,000 cites) is the citation for any complex network measure you compute. Required reading."
+  },
+  "https://www.nature.com/articles/nn.4502": {
+    tags: ["network-neuroscience","review","bassett-sporns","2017"], level: "intermediate",
+    rationale: "Bassett & Sporns define the field of 'network neuroscience' as a discipline in this review — the modern frame your work fits into."
+  },
+  "https://direct.mit.edu/netn/article/4/1/30/2557/Questions-and-controversies-in-the-study-of-time": {
+    tags: ["dynamic-FC","critique","sliding-windows","methodology"], level: "advanced",
+    rationale: "Lurie et al.'s review of controversies in dynamic functional connectivity — essential before claiming dynamic FC results in your own papers."
+  },
+  "https://www.nature.com/articles/s41593-020-00719-y": {
+    tags: ["edge-centric","FC","novel-approach","faskowitz"], level: "advanced",
+    rationale: "Faskowitz et al.'s edge-centric FC approach reveals time-resolved structure missed by node-centric methods — a method worth piloting on your data."
+  },
+
+  // ===== P3-M2: Effective connectivity =====
+  "https://www.fil.ion.ucl.ac.uk/spm/": {
+    tags: ["tool","matlab","DCM","SPM"], level: "advanced",
+    rationale: "SPM is the only mature implementation of DCM for EEG; for now, you must use it for effective-connectivity modelling — no alternative exists."
+  },
+  "https://www.thevirtualbrain.org/": {
+    tags: ["tool","whole-brain","simulation","TVB"], level: "advanced",
+    rationale: "The Virtual Brain is the open-source platform for whole-brain simulation; valuable for testing how lesions propagate through connectivity."
+  },
+  "https://pubmed.ncbi.nlm.nih.gov/21170073/": {
+    tags: ["review","deco","whole-brain","resting-state"], level: "intermediate",
+    rationale: "Deco, Jirsa & McIntosh's review (>2,000 cites) frames resting-state dynamics as emergent from whole-brain models — conceptual bridge between connectivity and dynamics."
+  },
+  "https://www.sciencedirect.com/science/article/pii/S1053811903002027": {
+    tags: ["DCM","friston","seminal","effective-connectivity"], level: "advanced",
+    rationale: "Friston et al.'s original DCM paper (>5,000 cites); read once to understand the assumptions you'll inherit when you fit any DCM."
+  },
+  "https://www.sciencedirect.com/science/article/pii/S1053811917303361": {
+    tags: ["DCM","scalable","regression-DCM","frassle"], level: "advanced",
+    rationale: "Regression DCM scales effective connectivity to large networks — overcomes the small-network limitation that has kept DCM marginal in connectomics."
+  },
+  "https://link.springer.com/article/10.1007/BF00199471": {
+    tags: ["neural-mass","seminal","jansen-rit","oscillations"], level: "advanced",
+    rationale: "Jansen-Rit neural-mass model is the workhorse of EEG forward modelling — the basis for almost every DCM-EEG implementation."
+  },
+  "https://pmc.ncbi.nlm.nih.gov/articles/PMC1484078/": {
+    tags: ["neural-mass","wilson-cowan","oscillations","seminal"], level: "advanced",
+    rationale: "Wilson & Cowan's 1972 paper (>5,000 cites) is the historical foundation of population-level neural modelling — required reading for whole-brain modellers."
+  },
+
+  // ===== P3-M3: Brain state dynamics =====
+  "https://github.com/OHBA-analysis/HMM-MAR": {
+    tags: ["tool","HMM","matlab","python","vidaurre"], level: "advanced",
+    rationale: "OHBA HMM-MAR toolbox is the leading HMM implementation for M/EEG; pairs naturally with FieldTrip/MNE pipelines you already use."
+  },
+  "https://www.nature.com/articles/s41467-018-05316-z": {
+    tags: ["HMM","vidaurre","resting-state","transient-states"], level: "advanced",
+    rationale: "Vidaurre et al.'s flagship HMM application to MEG — the methodological template you should follow for HMM in EEG aphasia data."
+  },
+  "https://www.sciencedirect.com/science/article/pii/S1053811917305128": {
+    tags: ["LEiDA","cabral","phase-locking","kringelbach"], level: "advanced",
+    rationale: "LEiDA gives a complementary view of brain states via instantaneous phase relationships — computationally cheap and worth piloting alongside HMM."
+  },
+  "https://www.pnas.org/doi/10.1073/pnas.1216856110": {
+    tags: ["CAP","co-activation","liu-duyn","fMRI"], level: "advanced",
+    rationale: "Liu & Duyn's CAP framework gives single-frame brain states; faster than HMM and increasingly used to define functional repertoires."
+  },
+  "https://www.cell.com/neuron/fulltext/S0896-6273(17)30498-3": {
+    tags: ["manifold","latent-dynamics","gallego","review"], level: "advanced",
+    rationale: "Gallego et al. argue neural population activity lives on low-dimensional manifolds — a unifying view connecting connectomics and computation."
+  },
+  "https://www.pnas.org/doi/10.1073/pnas.1705120114": {
+    tags: ["HMM","hierarchical","vidaurre","MEG"], level: "advanced",
+    rationale: "Vidaurre's hierarchical brain-state HMM shows nested temporal structure — informs how you might model multi-timescale aphasia recovery."
+  },
+
+  // ===== P4-M1: Biophysics of NIBS =====
+  "https://simnibs.github.io/simnibs/": {
+    tags: ["tool","E-field","tDCS","TMS","modelling"], level: "intermediate",
+    rationale: "SimNIBS is the leading open tool for individualised E-field modelling — essential for any tACS dosing claim you make in a paper."
+  },
+  "https://www.parralab.org/roast/": {
+    tags: ["tool","E-field","tDCS","matlab"], level: "intermediate",
+    rationale: "ROAST offers a MATLAB-native alternative to SimNIBS — easier integration if your pipelines are already MATLAB-based."
+  },
+  "https://www.frontiersin.org/articles/10.3389/fnhum.2018.00211/full": {
+    tags: ["review","NIBS","herrmann","state-of-art"], level: "intermediate",
+    rationale: "Vosskuhl, Strüber & Herrmann's review summarises tACS mechanisms by Herrmann's own lab — the most informed single overview of where the field stands."
+  },
+  "https://elifesciences.org/articles/18834": {
+    tags: ["E-field","measurement","ground-truth","validation"], level: "advanced",
+    rationale: "Huang et al. measured actual electric fields in living human brains — the empirical ground truth all simulation tools should reproduce."
+  },
+  "https://www.frontiersin.org/articles/10.3389/fnhum.2013.00602/full": {
+    tags: ["review","tES","mechanism","cohen-kadosh"], level: "intermediate",
+    rationale: "Krause et al.'s mechanistic review of tES is one of the clearest articulations of what transcranial currents do at the cellular level."
+  },
+  "https://www.cell.com/neuron/fulltext/S0896-6273(04)00853-0": {
+    tags: ["TMS","theta-burst","seminal","protocol"], level: "intermediate",
+    rationale: "Huang et al.'s 2005 Neuron paper introduces theta-burst TMS — the protocol you'll see in 80% of modern plasticity-targeting TMS studies."
+  },
+  "https://www.sciencedirect.com/science/article/pii/S138824571730311X": {
+    tags: ["safety","tES","guidelines","clinical"], level: "intermediate",
+    rationale: "Antal et al.'s safety guidelines are the citation any IRB will want to see for human tES research — keep it in your reference manager permanently."
+  },
+
+  // ===== P4-M2: Network-targeted stimulation =====
+  "https://www.pnas.org/doi/10.1073/pnas.1405003111": {
+    tags: ["connectivity","fox","TMS","DBS","stimulation-targeting"], level: "advanced",
+    rationale: "Fox et al.'s PNAS paper (>1,500 cites) shows DBS/TMS/lesions act via shared networks — the foundational logic of connectivity-guided stimulation."
+  },
+  "https://www.sciencedirect.com/science/article/abs/pii/S1935861X18303115": {
+    tags: ["closed-loop","TMS","zrenner","state-dependent"], level: "advanced",
+    rationale: "Zrenner et al. demonstrate EEG-triggered TMS produces brain-state-dependent effects — the technical proof closed-loop is worth the engineering."
+  },
+  "https://ajp.psychiatryonline.org/doi/10.1176/appi.ajp.2019.19070720": {
+    tags: ["TMS","SAINT","accelerated","clinical-trial"], level: "advanced",
+    rationale: "Cole et al.'s SAINT protocol shows accelerated theta-burst TMS works clinically — template for designing intensive aphasia stimulation trials."
+  },
+  "https://www.nature.com/articles/nn.3620": {
+    tags: ["FUS","legon","focused-ultrasound","seminal"], level: "advanced",
+    rationale: "Legon et al.'s Nature Neuroscience paper is the first robust human FUS demonstration — frontier method to track for your future stimulation work."
+  },
+  "https://www.cell.com/current-biology/fulltext/S0960-9822(13)01567-3": {
+    tags: ["tACS","entrainment","helfrich","oscillation"], level: "advanced",
+    rationale: "Helfrich et al. provide the cleanest demonstration of tACS entrainment of brain oscillations — citation backbone for any frequency-specific tACS claim."
+  },
+  "https://journals.sagepub.com/doi/10.1177/1073858410386614": {
+    tags: ["tDCS","mechanism","stagg-nitsche","review"], level: "intermediate",
+    rationale: "Stagg & Nitsche's tDCS-mechanism review is the standard citation; written by the field's central figures, accessible and authoritative."
+  },
+
+  // ===== P4-M3: Lesion-network mapping =====
+  "http://toolkit.bcblab.com/": {
+    tags: ["tool","disconnectome","lesion","tractography"], level: "advanced",
+    rationale: "BCBToolkit computes lesion-disconnection maps from stroke MRI — the most practical implementation of disconnectome analysis for clinical data."
+  },
+  "https://www.nature.com/articles/s41583-022-00583-8": {
+    tags: ["lesion-network","causal","fox","siddiqi","review"], level: "advanced",
+    rationale: "Siddiqi et al.'s NRN review is the definitive treatment of causal mapping; sets the methodological standard your post-stroke connectivity work should meet."
+  },
+  "https://academic.oup.com/brain/article/129/6/1371/391105": {
+    tags: ["aphasia","recovery","saur","longitudinal"], level: "intermediate",
+    rationale: "Saur et al.'s Brain paper on language reorganisation after stroke is a foundational citation for any aphasia-recovery imaging study."
+  },
+  "https://academic.oup.com/brain/article/138/10/3061/2848211": {
+    tags: ["lesion-network","boes","symptoms","network-localisation"], level: "advanced",
+    rationale: "Boes et al. show focal lesions cause symptoms via networks not just local damage — the empirical foundation of lesion-network mapping."
+  },
+  "https://www.sciencedirect.com/science/article/pii/S0028393217301045": {
+    tags: ["PLORAS","prediction","price","aphasia-outcome"], level: "intermediate",
+    rationale: "Price's PLORAS database paper — the canonical demonstration that pre-stroke variables predict aphasia outcome; sets the prediction-modelling bar."
+  },
+  "https://www.tandfonline.com/doi/full/10.1080/02687030701612213": {
+    tags: ["aphasia-therapy","CIAT","intensity","pulvermuller"], level: "intermediate",
+    rationale: "Pulvermüller & Berthier articulate why intensive, constraint-induced therapy works for aphasia — sets the rationale for combining therapy with stimulation."
+  },
+  "https://www.sciencedirect.com/science/article/pii/S1053811917311175": {
+    tags: ["review","stroke-recovery","aphasia","hartwigsen","neuroimaging"], level: "intermediate",
+    rationale: "Hartwigsen & Saur synthesise modern aphasia-recovery imaging; the up-to-date counterpart to Saur 2006 you need for any contemporary review section."
+  },
+
+  // ===== P5-M1: Aphasia phenotyping =====
+  "https://aphasia.talkbank.org/": {
+    tags: ["dataset","aphasia","discourse","corpus","macwhinney"], level: "intermediate",
+    rationale: "AphasiaBank is the largest open aphasia discourse corpus; essential dataset for benchmarking any automated discourse analysis pipeline you build."
+  },
+  "https://www.nature.com/articles/ncomms7762": {
+    tags: ["aphasia","lesion-symptom","mirman","factor-analysis"], level: "advanced",
+    rationale: "Mirman et al.'s data-driven aphasia phenotyping in Nature Communications — the model for moving past Boston-classification heritage syndromes."
+  },
+  "https://www.neurology.org/doi/10.1212/WNL.0b013e31821103e6": {
+    tags: ["PPA","classification","gorno-tempini","clinical-criteria"], level: "intermediate",
+    rationale: "Gorno-Tempini et al.'s PPA classification is the international consensus criteria — required citation for any primary progressive aphasia work."
+  },
+  "https://pubmed.ncbi.nlm.nih.gov/33126865/": {
+    tags: ["AphasiaBank","methods","fromm","corpus-design"], level: "intermediate",
+    rationale: "Fromm et al. describe the data structure and annotation conventions of AphasiaBank — the methods reference for working with the corpus reproducibly."
+  },
+  "https://pubs.asha.org/doi/10.1044/2021_AJSLP-20-00261": {
+    tags: ["discourse","methods","best-practice","standardisation"], level: "intermediate",
+    rationale: "Stark et al.'s best-practices paper for discourse collection — directly relevant to your discourse-analysis methodology and reviewer concerns."
+  },
+  "https://www.frontiersin.org/articles/10.3389/fneur.2019.00295/full": {
+    tags: ["neuroplasticity","aphasia-therapy","kiran-thompson","review"], level: "intermediate",
+    rationale: "Kiran & Thompson's review links aphasia therapy to neural plasticity mechanisms — the conceptual bridge between your SLP work and connectomics."
+  },
+
+  // ===== P5-M2: ML for neural data =====
+  "https://deeplearning.neuromatch.io/": {
+    tags: ["course","deep-learning","python","free"], level: "advanced",
+    rationale: "Neuromatch Deep Learning is the most rigorous free DL curriculum aimed at neuroscientists — better starting point than generic ML MOOCs."
+  },
+  "https://mne.tools/stable/auto_tutorials/machine-learning/index.html": {
+    tags: ["tool","decoding","MNE","tutorial"], level: "intermediate",
+    rationale: "MNE decoding tutorials cover the standard ML pipelines (logistic regression, time-resolved decoding) in your existing M/EEG ecosystem."
+  },
+  "https://www.annualreviews.org/doi/10.1146/annurev-neuro-080317-061906": {
+    tags: ["RSA","kriegeskorte","review","representations"], level: "advanced",
+    rationale: "Kriegeskorte & Diedrichsen's Annual Review distils 15 years of RSA — the most cite-worthy framing for any model-brain comparison you publish."
+  },
+  "https://www.frontiersin.org/articles/10.3389/neuro.06.004.2008/full": {
+    tags: ["RSA","seminal","kriegeskorte","methods"], level: "intermediate",
+    rationale: "The original Kriegeskorte RSA paper (>3,000 cites) — must-cite when defining your RSA methodology."
+  },
+  "https://www.deeplearningbook.org/": {
+    tags: ["textbook","deep-learning","goodfellow","reference"], level: "advanced",
+    rationale: "Goodfellow et al.'s Deep Learning book is freely available and the standard graduate-level reference; skim for transformer/attention chapters."
+  },
+  "https://www.sciencedirect.com/science/article/pii/S105381191630595X": {
+    tags: ["decoding","methods","varoquaux","cross-validation"], level: "intermediate",
+    rationale: "Varoquaux et al.'s NeuroImage paper on tuning brain decoders — practical guide to avoiding the cross-validation pitfalls that sink ML neuroscience papers."
+  },
+  "https://www.nature.com/articles/nn.4244": {
+    tags: ["deep-learning","cortex","yamins","encoding"], level: "advanced",
+    rationale: "Yamins & DiCarlo's framework for using deep models to understand cortex — the conceptual precursor to current LLM-brain work."
+  },
+
+  // ===== P5-M3: LLMs as models of language cortex =====
+  "https://www.pnas.org/doi/10.1073/pnas.2105646118": {
+    tags: ["LLM","encoding","schrimpf","language-cortex"], level: "advanced",
+    rationale: "Schrimpf et al.'s PNAS paper demonstrates LLMs predict human language responses — the citation-magnet that opened this entire research direction."
+  },
+  "https://www.nature.com/articles/s41562-023-01783-7": {
+    tags: ["LLM","causal","tuckute","manipulation"], level: "advanced",
+    rationale: "Tuckute et al.'s closed-loop LLM-driven brain manipulation — the most ambitious recent test of whether LLMs causally predict language activity."
+  },
+  "https://arxiv.org/abs/2305.11863": {
+    tags: ["LLM","scaling","fMRI","antonello"], level: "advanced",
+    rationale: "Antonello et al. on scaling laws for language encoding models — sets quantitative expectations for how much LLM size buys you in brain prediction."
+  },
+  "https://www.nature.com/articles/s42003-022-03036-1": {
+    tags: ["LLM","caucheteux","king","convergence"], level: "advanced",
+    rationale: "Caucheteux & King articulate where brains and LLMs converge and diverge — sharper framing than 'brain prediction' headlines suggest."
+  },
+  "https://proceedings.neurips.cc/paper/2019/hash/749a8e6c231831ef7756db230b4359c8-Abstract.html": {
+    tags: ["LLM","interpretation","toneva","brain-aligned"], level: "advanced",
+    rationale: "Toneva & Wehbe's NeurIPS paper uses brain recordings to interpret NLP models — the reverse-direction analysis that complements encoding work."
+  },
+  "https://aclanthology.org/2022.acl-long.273/": {
+    tags: ["LLM","fMRI","pasquiou","encoding"], level: "advanced",
+    rationale: "Pasquiou et al.'s ACL paper compares neural language models as fMRI predictors — useful for choosing which LLM architecture to use in your encoding work."
+  },
+
+  // ===== P5-M4: RCT & lab leadership =====
+  "https://osf.io/registries/": {
+    tags: ["tool","preregistration","OSF","open-science"], level: "foundational",
+    rationale: "OSF Registries is the default home for pre-registrations; getting fluent here is a small investment with outsized career-credibility returns."
+  },
+  "https://www.nih.gov/grants-funding": {
+    tags: ["funding","NIH","grants","reference"], level: "intermediate",
+    rationale: "NIH grants portal is the gateway to the largest research-funding pipeline globally; bookmark for fellowship and R-mechanism opportunities."
+  },
+  "https://www.equator-network.org/": {
+    tags: ["reporting","guidelines","EQUATOR","standards"], level: "foundational",
+    rationale: "EQUATOR aggregates every reporting guideline (CONSORT, STROBE, PRISMA, etc.) — your first stop before writing a methods or results section."
+  },
+  "https://www.bmj.com/content/340/bmj.c332": {
+    tags: ["CONSORT","RCT","reporting","seminal"], level: "intermediate",
+    rationale: "Schulz, Altman & Moher's CONSORT 2010 statement (>10,000 cites) is the foundational reporting standard for any trial you'll design or review."
+  },
+  "https://www.pnas.org/doi/10.1073/pnas.1708274114": {
+    tags: ["preregistration","open-science","nosek","seminal"], level: "intermediate",
+    rationale: "Nosek et al.'s PNAS argument for preregistration is the most-cited modern case for the practice — read once, internalise, evangelise to your trainees."
+  },
+  "https://www.nature.com/articles/d41586-019-02674-6": {
+    tags: ["registered-reports","chambers","publishing","reform"], level: "intermediate",
+    rationale: "Chambers' Nature commentary on Registered Reports — practical guide to using the format yourself for your higher-stakes future trials."
+  },
+  "https://www.cshlpress.com/link/at_helm2.htm": {
+    tags: ["leadership","PI","mentorship","barker"], level: "advanced",
+    rationale: "Barker's At The Helm is the only practical handbook for first-time PIs that addresses lab management as an actual skill — read in your final year."
+  }
+};
+</script>
+<script>
 (function(){
   const STORAGE_KEY = "langneuro_roadmap_v1";
   const data = window.ROADMAP;
@@ -1187,12 +1748,178 @@ window.ROADMAP = {
     const activeSet = new Set(mst.activeKeys || []);
     return allKeysFor(m, mst).filter(k => !completedSet.has(k) && !activeSet.has(k));
   }
-  // Fill activeKeys up to ACTIVE_SLOTS from pool
+  // ----- criteria-based scoring -----
+  // Three pillars: trustworthy publisher + high-impact material + matched to
+  // current goal & progress (avoiding redundancy with already-completed work).
+  const SOURCE_META = window.SOURCE_META || {};
+
+  // Trust tier from URL host (0-3 scale).
+  function trustTier(url){
+    if(!url) return 1;
+    let h;
+    try { h = new URL(url).hostname.toLowerCase(); } catch(e){ return 1; }
+    // Tier 3: top peer-reviewed journals / major academic presses
+    const t3 = ["nature.com","science.org","cell.com","pnas.org","mitpress.mit.edu","direct.mit.edu","cambridge.org","global.oup.com","academic.oup.com","journals.physiology.org","neurology.org","elifesciences.org","frontiersin.org","pmc.ncbi.nlm.nih.gov","pubmed.ncbi.nlm.nih.gov","jneurosci.org"];
+    // Tier 2.5: established journal / major society / strong publishers
+    const t25 = ["sciencedirect.com","onlinelibrary.wiley.com","link.springer.com","ajp.psychiatryonline.org","journals.sagepub.com","ieeexplore.ieee.org","annualreviews.org","bmj.com"];
+    // Tier 2: peer-reviewed but smaller venue / textbook publisher
+    const t2 = ["tandfonline.com","psycnet.apa.org","routledge.com","cshlpress.com","mpi.nl","stevenpinker.com","bookdown.org","xcelab.net","paul-buerkner.github.io","bayes.cs.ucla.edu"];
+    // Tier 1.5: established docs / community textbook / known infrastructure
+    const t15 = ["github.com","mne.tools","fieldtriptoolbox.org","simnibs.github.io","mrtrix.org","fmriprep.org","qsiprep.readthedocs.io","neuroimage.usc.edu","thevirtualbrain.org","sites.google.com","andysbrainbook.readthedocs.io","ocw.mit.edu","cuttingeeg.org","dandiarchive.org","deeplearningbook.org","compneuro.neuromatch.io","deeplearning.neuromatch.io","equator-network.org","osf.io","nih.gov"];
+    // Tier 1: preprint / conference proceedings
+    const t1 = ["arxiv.org","aclanthology.org","proceedings.neurips.cc","biorxiv.org"];
+    const match = (list) => list.some(d => h === d || h.endsWith("." + d));
+    if(match(t3)) return 3;
+    if(match(t25)) return 2.5;
+    if(match(t2)) return 2;
+    if(match(t15)) return 1.5;
+    if(match(t1)) return 1;
+    return 1; // unknown
+  }
+
+  // Impact tier from author/title patterns (0-3 scale).
+  // Recognises canonical originators and pre-2010 papers as high-impact.
+  const HIGH_IMPACT_NAMES = /\b(Friston|Friederici|Hickok|Poeppel|Fedorenko|Bassett|Sporns|Mesgarani|Hagoort|Levelt|Saffran|Aslin|Newport|Pinker|Jackendoff|Goldberg|McElreath|Gelman|Pearl|Kruschke|Maris|Oostenveld|Catani|Mirman|Saur|Price|Siddiqi|Zrenner|Cole|Legon|Goldstein|Schrimpf|Tuckute|Hasson|Kriegeskorte|Yamins|DiCarlo|MacWhinney|Kiran|Thompson|Gorno-Tempini|Pulverm[üu]ller|Hartwigsen|Vidaurre|Deco|Kringelbach|Herrmann|Thut|Bikson|Stagg|Nitsche|Wilson|Cowan|Jansen|Rit|Rao|Ballard|Wagenmakers|Chambers|Nosek|Schulz|Altman|Moher|Dell|Chang|Dehaene|Mukamel|Halgren)\b/i;
+  function impactTier(label, url){
+    if(!label) label = "";
+    let score = 1;
+    if(HIGH_IMPACT_NAMES.test(label)) score = 3;
+    // Pre-2010 still-cited papers in this curated pool are canonical.
+    const ym = label.match(/\b(19[5-9]\d|20[0-1]\d)\b/);
+    if(ym){
+      const y = parseInt(ym[1], 10);
+      if(y <= 2009 && score < 3) score = Math.max(score, 2.5);
+    }
+    // Modern Nature/Science/Cell/Neuron family papers default to high impact.
+    if(/nature\.com|science\.org|cell\.com|pnas\.org|elifesciences/.test(url||"")) score = Math.max(score, 2.5);
+    // "Seminal" / "review" markers in titles
+    if(/\b(review|seminal|landmark|classic|annual review)\b/i.test(label)) score = Math.max(score, 2);
+    return score;
+  }
+
+  // Tokenise the module's knowledge bullets into topic tokens.
+  function moduleTokens(m){
+    const text = (m.knowledge || []).join(" ") + " " + (m.title || "") + " " + (m.method || "");
+    return new Set(
+      text.toLowerCase()
+        .replace(/[^a-z0-9\s\-]/g, " ")
+        .split(/\s+/)
+        .filter(w => w.length >= 4)
+    );
+  }
+
+  // Fit score: overlap between source tags and module tokens (0-3).
+  function fitScore(srcTags, modTokens){
+    if(!srcTags || !srcTags.length) return 1;
+    let hits = 0;
+    srcTags.forEach(tag => {
+      const parts = String(tag).toLowerCase().split(/[\s\-]+/);
+      if(parts.some(p => p.length >= 4 && modTokens.has(p))) hits += 1;
+    });
+    const ratio = hits / srcTags.length;
+    if(ratio >= 0.6) return 3;
+    if(ratio >= 0.35) return 2.5;
+    if(ratio >= 0.15) return 2;
+    if(hits > 0) return 1.5;
+    return 1;
+  }
+
+  // Level fit: foundational < 30% progress, intermediate 30–70%, advanced > 70%.
+  function levelScore(srcLevel, percent){
+    if(!srcLevel) return 1;
+    let band = "intermediate";
+    if(percent < 30) band = "foundational";
+    else if(percent > 70) band = "advanced";
+    if(srcLevel === band) return 2;
+    // adjacent levels
+    const order = ["foundational","intermediate","advanced"];
+    const di = Math.abs(order.indexOf(srcLevel) - order.indexOf(band));
+    if(di === 1) return 1.2;
+    return 0.6;
+  }
+
+  // Redundancy penalty: if >50% of this source's tags already appear in
+  // tags of completed sources for the same module, dock the score.
+  function redundancyPenalty(srcTags, completedTagBag){
+    if(!srcTags || !srcTags.length || !completedTagBag.size) return 0;
+    const overlap = srcTags.filter(t => completedTagBag.has(String(t).toLowerCase())).length;
+    const ratio = overlap / srcTags.length;
+    if(ratio >= 0.6) return 2;
+    if(ratio >= 0.4) return 1.2;
+    if(ratio >= 0.2) return 0.5;
+    return 0;
+  }
+
+  // Combined score for a single source key against the module + state.
+  function scoreSource(m, mst, key, modTokens, completedTagBag){
+    const r = getResource(m, mst, key);
+    if(!r) return { total: -Infinity, parts: null, meta: null };
+    const meta = SOURCE_META[r.url] || null;
+    const tags = meta ? meta.tags : [];
+    const level = meta ? meta.level : null;
+    const t = trustTier(r.url);
+    const i = impactTier(r.label, r.url);
+    const f = fitScore(tags, modTokens);
+    const lv = levelScore(level, mst.percent || 0);
+    const pen = redundancyPenalty(tags, completedTagBag);
+    // Weights: trust 1.0, impact 1.0, fit 1.2, level 0.8, penalty subtracted.
+    const total = (1.0 * t) + (1.0 * i) + (1.2 * f) + (0.8 * lv) - pen;
+    return { total, parts: { t, i, f, lv, pen }, meta, tags, level };
+  }
+
+  // Rank available keys by score, descending.
+  function rankAvailable(m, mst){
+    const pool = availableKeys(m, mst);
+    const modTokens = moduleTokens(m);
+    const completedTagBag = new Set();
+    (mst.completedResources || []).forEach(c => {
+      const r = getResource(m, mst, c.key);
+      const meta = r && SOURCE_META[r.url];
+      if(meta && meta.tags) meta.tags.forEach(t => completedTagBag.add(String(t).toLowerCase()));
+    });
+    const scored = pool.map(k => ({ key: k, ...scoreSource(m, mst, k, modTokens, completedTagBag) }));
+    scored.sort((a, b) => b.total - a.total);
+    return scored;
+  }
+
+  // Render-time score lookup for an already-active key.
+  function scoreActiveKey(m, mst, key){
+    const modTokens = moduleTokens(m);
+    const completedTagBag = new Set();
+    (mst.completedResources || []).forEach(c => {
+      const r = getResource(m, mst, c.key);
+      const meta = r && SOURCE_META[r.url];
+      if(meta && meta.tags) meta.tags.forEach(t => completedTagBag.add(String(t).toLowerCase()));
+    });
+    return scoreSource(m, mst, key, modTokens, completedTagBag);
+  }
+
+  // Fill activeKeys up to ACTIVE_SLOTS by picking the highest-scoring
+  // available keys, re-scored after each pick so the redundancy penalty
+  // also discourages duplication among the active set itself.
   function topUpActive(m, mst){
     if(!mst.activeKeys) mst.activeKeys = [];
-    const pool = availableKeys(m, mst);
-    while(mst.activeKeys.length < ACTIVE_SLOTS && pool.length > 0){
-      mst.activeKeys.push(pool.shift());
+    while(mst.activeKeys.length < ACTIVE_SLOTS){
+      const pool = availableKeys(m, mst);
+      if(!pool.length) break;
+      const modTokens = moduleTokens(m);
+      // "already covered" set = completed tags + currently-active tags,
+      // so the next pick complements rather than duplicates.
+      const coveredTagBag = new Set();
+      const addTags = (key) => {
+        const r = getResource(m, mst, key);
+        const meta = r && SOURCE_META[r.url];
+        if(meta && meta.tags) meta.tags.forEach(t => coveredTagBag.add(String(t).toLowerCase()));
+      };
+      (mst.completedResources || []).forEach(c => addTags(c.key));
+      (mst.activeKeys || []).forEach(k => addTags(k));
+      let best = null;
+      pool.forEach(k => {
+        const s = scoreSource(m, mst, k, modTokens, coveredTagBag);
+        if(!best || s.total > best.total) best = { key: k, total: s.total };
+      });
+      if(!best) break;
+      mst.activeKeys.push(best.key);
     }
   }
 
@@ -1257,6 +1984,10 @@ window.ROADMAP = {
     return fresh;
   }
 
+  // Bump when source selection logic changes so existing users get a re-rank
+  // on their next load (completed sources are always preserved).
+  const SCORING_VERSION = 2;
+
   let state = loadState();
   function loadState(){
     try {
@@ -1264,18 +1995,29 @@ window.ROADMAP = {
       if(!raw) return defaultState();
       const parsed = JSON.parse(raw);
       const fresh = defaultState();
+      const oldVer = typeof parsed.scoringVersion === "number" ? parsed.scoringVersion : 1;
       data.pillars.forEach(p => p.modules.forEach(m => {
         if(parsed.modules && parsed.modules[m.id]){
           fresh.modules[m.id] = migrateModuleState(m, parsed.modules[m.id]);
+          // One-time re-rank: drop unfinished active picks so the new
+          // criteria-based scoring chooses the active set on next render.
+          if(oldVer < SCORING_VERSION){
+            fresh.modules[m.id].activeKeys = [];
+            topUpActive(m, fresh.modules[m.id]);
+          }
         }
       }));
       fresh.log = parsed.log || [];
       fresh.theme = parsed.theme || "light";
       fresh.startISO = parsed.startISO || data.meta.startISO;
+      fresh.scoringVersion = SCORING_VERSION;
       return fresh;
     } catch(e){ console.warn("state load failed", e); return defaultState(); }
   }
-  function saveState(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+  function saveState(){
+    state.scoringVersion = SCORING_VERSION;
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  }
 
   // ----- helpers -----
   function monthsSinceStart(){
@@ -1433,18 +2175,48 @@ window.ROADMAP = {
     node.className = "module";
     node.dataset.id = m.id;
 
-    // Active 4 critical sources
+    // Active 4 critical sources — with criteria badges + inline rationale.
     const activeSlots = [];
     for(let i=0; i<ACTIVE_SLOTS; i++){
       const key = st.activeKeys[i];
       const r = key ? getResource(m, st, key) : null;
       if(r){
         const isCustom = key.startsWith("c:");
+        const sc = scoreActiveKey(m, st, key);
+        const trust = sc.parts ? sc.parts.t : 1;
+        const impact = sc.parts ? sc.parts.i : 1;
+        const levelLabel = sc.level || (isCustom ? "custom" : "unrated");
+        // Star renderer (handles 0.5 steps)
+        const stars = (n) => {
+          const full = Math.floor(n);
+          const half = (n - full) >= 0.5 ? 1 : 0;
+          const empty = 3 - full - half;
+          return "★".repeat(full) + (half ? "☆" : "") + "·".repeat(empty);
+        };
+        const trustLabel = trust >= 3 ? "top-tier publisher" : trust >= 2.5 ? "established journal" : trust >= 2 ? "peer-reviewed venue" : trust >= 1.5 ? "vetted infrastructure" : "preprint / unrated";
+        const impactLabel = impact >= 3 ? "high-impact / canonical author" : impact >= 2.5 ? "strong-impact paper" : impact >= 2 ? "notable" : "emerging";
+        const rationaleText = sc.meta && sc.meta.rationale
+          ? sc.meta.rationale
+          : (isCustom ? "You added this — rationale not auto-generated." : "Curated for this module; no per-source rationale stored.");
+        // Redundancy / complementarity signal
+        const pen = sc.parts ? sc.parts.pen : 0;
+        const complement = pen >= 1.2 ? '<span class="complement-note overlap" title="Overlaps strongly with what you\'ve already completed">overlaps completed</span>'
+          : pen >= 0.5 ? '<span class="complement-note partial" title="Some overlap with completed sources">partial overlap</span>'
+          : ((st.completedResources||[]).length > 0 ? '<span class="complement-note fresh" title="Covers angles your completed sources don\'t">complements completed</span>' : '');
         activeSlots.push(`<div class="res-item active" data-key="${key}">
-          <span class="type-tag">${escapeHtml(r.type)}</span>
-          <a href="${escapeHtml(r.url)}" target="_blank" rel="noopener">${escapeHtml(r.label)}</a>
-          ${isCustom ? '<span class="custom-badge" title="Added by you">custom</span>' : ''}
-          <button class="res-done-btn" data-key="${key}" title="Mark this source as completed">✓ Done</button>
+          <div class="res-row">
+            <span class="type-tag">${escapeHtml(r.type)}</span>
+            <a href="${escapeHtml(r.url)}" target="_blank" rel="noopener">${escapeHtml(r.label)}</a>
+            ${isCustom ? '<span class="custom-badge" title="Added by you">custom</span>' : ''}
+            <button class="res-done-btn" data-key="${key}" title="Mark this source as completed">✓ Done</button>
+          </div>
+          <div class="res-badges">
+            <span class="badge trust" title="Trustworthiness: ${trustLabel}">trust <b>${stars(trust)}</b></span>
+            <span class="badge impact" title="Impact: ${impactLabel}">impact <b>${stars(impact)}</b></span>
+            <span class="badge level lvl-${escapeHtml(levelLabel)}" title="Suggested at this stage of your progress">${escapeHtml(levelLabel)}</span>
+            ${complement}
+          </div>
+          <div class="res-rationale" title="Why this source was selected for you now">Why now — ${escapeHtml(rationaleText)}</div>
         </div>`);
       } else {
         activeSlots.push(`<div class="res-item empty">
@@ -1513,7 +2285,7 @@ window.ROADMAP = {
           <div class="field">
             <div class="field-label">
               Critical sources (where)
-              <span class="src-counter">${activeCount} active · ${completedCount} completed · ${poolRemaining} remaining</span>
+              <span class="src-counter" title="Sources selected by 3 criteria: trustworthy publisher + high-impact material + matched to your goal & progress (avoiding redundancy with completed sources)">${activeCount} active · ${completedCount} completed · ${poolRemaining} remaining · ranked by trust/impact/fit</span>
             </div>
             <div class="res-list active-list">${activeHTML}</div>
             <details class="completed-archive" ${completedCount === 0 ? "" : ""}>
