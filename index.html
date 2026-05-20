@@ -286,6 +286,52 @@
   }
   .module-controls .res-item .type-tag { background: var(--surface); }
   .res-item input[type=checkbox] { width: auto; margin: 0; }
+  .res-item a { flex: 1; min-width: 0; word-break: break-word; }
+  .res-item.active { padding: 4px 0; }
+  .res-item.empty { color: var(--text-mute); font-style: italic; }
+  .res-item.completed { opacity: 0.72; }
+  .res-item.completed a { text-decoration: line-through; color: var(--text-mute); }
+  .res-item .done-date { font-family: var(--mono); font-size: 10px; color: var(--text-mute); }
+  .res-item .custom-badge {
+    font-family: var(--mono); font-size: 9px; color: var(--accent, #6366f1);
+    border: 1px solid var(--border); padding: 1px 5px; border-radius: 3px; text-transform: uppercase;
+  }
+  .res-done-btn, .res-restore-btn {
+    border: 1px solid var(--border); background: var(--surface); color: var(--text);
+    font-size: 11px; padding: 2px 8px; border-radius: 4px; cursor: pointer;
+    margin-left: auto; flex-shrink: 0;
+  }
+  .res-done-btn:hover { background: var(--accent, #6366f1); color: white; border-color: var(--accent, #6366f1); }
+  .res-restore-btn { font-size: 14px; padding: 0px 6px; line-height: 1.6; }
+  .res-restore-btn:hover { background: var(--surface-2); }
+  .src-counter {
+    font-family: var(--mono); font-size: 10px; color: var(--text-mute);
+    font-weight: normal; margin-left: 8px;
+  }
+  .completed-archive, .add-custom {
+    margin-top: 8px; border-top: 1px dashed var(--border); padding-top: 6px;
+  }
+  .completed-archive > summary, .add-custom > summary {
+    font-size: 12px; color: var(--text-soft); cursor: pointer; padding: 2px 0;
+    list-style: revert;
+  }
+  .completed-archive > summary:hover, .add-custom > summary:hover { color: var(--text); }
+  .completed-archive[open] > summary, .add-custom[open] > summary { color: var(--text); margin-bottom: 6px; }
+  .add-res-form {
+    display: grid; grid-template-columns: 1fr 1fr auto auto; gap: 6px; margin-top: 4px;
+  }
+  .add-res-form input, .add-res-form select {
+    font-size: 12px; padding: 6px 8px; border: 1px solid var(--border);
+    border-radius: 4px; background: var(--surface); color: var(--text); width: auto;
+  }
+  .add-res-form button {
+    border: 1px solid var(--accent, #6366f1); background: var(--accent, #6366f1); color: white;
+    font-size: 12px; padding: 6px 14px; border-radius: 4px; cursor: pointer;
+  }
+  .add-res-form button:hover { filter: brightness(1.1); }
+  @media (max-width: 720px){
+    .add-res-form { grid-template-columns: 1fr; }
+  }
   .exp-item { font-size: 13px; color: var(--text-soft); }
   .exp-item strong { color: var(--text); }
   .exp-item .aff { color: var(--text-mute); font-size: 12px; }
@@ -600,7 +646,11 @@ window.ROADMAP = {
             { type: "book", label: "Pinker — The Language Instinct", url: "https://stevenpinker.com/publications/language-instinct" },
             { type: "book", label: "Jackendoff — Foundations of Language", url: "https://global.oup.com/academic/product/foundations-of-language-9780199264377" },
             { type: "book", label: "Harley — The Psychology of Language", url: "https://www.routledge.com/The-Psychology-of-Language-From-Data-to-Theory/Harley/p/book/9781848720893" },
-            { type: "course", label: "MIT OCW 9.59 Lab in Psycholinguistics", url: "https://ocw.mit.edu/courses/9-59j-lab-in-psycholinguistics-spring-2017/" }
+            { type: "course", label: "MIT OCW 9.59 Lab in Psycholinguistics", url: "https://ocw.mit.edu/courses/9-59j-lab-in-psycholinguistics-spring-2017/" },
+            { type: "book", label: "Levelt — Speaking: From Intention to Articulation (MIT Press)", url: "https://direct.mit.edu/books/monograph/4300/SpeakingFrom-Intention-to-Articulation" },
+            { type: "paper", label: "Dell 1986 — Spreading-activation theory of retrieval in sentence production", url: "https://psycnet.apa.org/record/1986-30586-001" },
+            { type: "paper", label: "Saffran, Aslin & Newport 1996 — Statistical learning by 8-month-old infants", url: "https://www.science.org/doi/10.1126/science.274.5294.1926" },
+            { type: "book", label: "Goldberg — Constructions at Work (usage-based grammar)", url: "https://global.oup.com/academic/product/constructions-at-work-9780199268528" }
           ],
           experts: [
             { name: "Steven Pinker", aff: "Harvard", why: "Synthesiser of language-as-instinct framework" },
@@ -625,7 +675,11 @@ window.ROADMAP = {
             { type: "book", label: "Friederici — Language in Our Brain (MIT Press)", url: "https://mitpress.mit.edu/9780262036924/" },
             { type: "paper", label: "Hickok & Poeppel 2007 — Cortical organization of speech processing", url: "https://www.nature.com/articles/nrn2113" },
             { type: "paper", label: "Hagoort 2013 — MUC (Memory, Unification, Control)", url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC3709422/" },
-            { type: "paper", label: "Fedorenko et al. 2024 — Language network update", url: "https://www.nature.com/articles/s41583-024-00802-4" }
+            { type: "paper", label: "Fedorenko et al. 2024 — Language network update", url: "https://www.nature.com/articles/s41583-024-00802-4" },
+            { type: "paper", label: "Friederici 2011 — Brain basis of language processing (Physiol Rev)", url: "https://journals.physiology.org/doi/full/10.1152/physrev.00006.2011" },
+            { type: "paper", label: "Fedorenko & Thompson-Schill 2014 — Reworking the language network", url: "https://www.cell.com/trends/cognitive-sciences/fulltext/S1364-6613(14)00029-X" },
+            { type: "paper", label: "Catani et al. 2005 — Perisylvian language networks (arcuate fasciculus)", url: "https://onlinelibrary.wiley.com/doi/10.1002/ana.20319" },
+            { type: "paper", label: "Hagoort 2005 — On Broca, brain, and binding (TICS)", url: "https://www.cell.com/trends/cognitive-sciences/fulltext/S1364-6613(05)00208-2" }
           ],
           experts: [
             { name: "Greg Hickok", aff: "UC Irvine", why: "Dual-stream architect" },
@@ -652,7 +706,11 @@ window.ROADMAP = {
             { type: "book", label: "Parr, Pezzulo & Friston — Active Inference (MIT Press, open access)", url: "https://mitpress.mit.edu/9780262045353/active-inference/" },
             { type: "paper", label: "Friston 2010 — Free-energy principle", url: "https://www.nature.com/articles/nrn2787" },
             { type: "paper", label: "Lupyan & Clark 2015 — Words and the world (predictive minds)", url: "https://journals.sagepub.com/doi/10.1177/0963721415570732" },
-            { type: "course", label: "Neuromatch Academy — Bayesian Statistics + Deep Learning", url: "https://compneuro.neuromatch.io/" }
+            { type: "course", label: "Neuromatch Academy — Computational Neuroscience", url: "https://compneuro.neuromatch.io/" },
+            { type: "paper", label: "Rao & Ballard 1999 — Predictive coding in visual cortex", url: "https://www.nature.com/articles/nn0199_79" },
+            { type: "paper", label: "Clark 2013 — Whatever next? Predictive brains (BBS)", url: "https://www.cambridge.org/core/journals/behavioral-and-brain-sciences/article/abs/whatever-next-predictive-brains-situated-agents-and-the-future-of-cognitive-science/33542C736E17E3D1D44E8D03BE5F4CD9" },
+            { type: "tool", label: "pymdp — Active inference in Python", url: "https://github.com/infer-actively/pymdp" },
+            { type: "paper", label: "de Lange, Heilbron & Kok 2018 — How do expectations shape perception?", url: "https://www.cell.com/trends/cognitive-sciences/fulltext/S1364-6613(18)30126-1" }
           ],
           experts: [
             { name: "Karl Friston", aff: "UCL", why: "FEP/active inference" },
@@ -678,7 +736,11 @@ window.ROADMAP = {
             { type: "book", label: "McElreath — Statistical Rethinking (2nd ed.) + lectures", url: "https://xcelab.net/rm/" },
             { type: "book", label: "Gelman et al. — Bayesian Data Analysis (3rd ed.)", url: "http://www.stat.columbia.edu/~gelman/book/" },
             { type: "course", label: "Solomon Kurz — Statistical Rethinking with brms/tidyverse", url: "https://bookdown.org/content/4857/" },
-            { type: "paper", label: "Maris & Oostenveld 2007 — Nonparametric statistical testing of EEG/MEG", url: "https://www.sciencedirect.com/science/article/pii/S0165027007001707" }
+            { type: "paper", label: "Maris & Oostenveld 2007 — Nonparametric statistical testing of EEG/MEG", url: "https://www.sciencedirect.com/science/article/pii/S0165027007001707" },
+            { type: "tool", label: "brms — Bayesian regression in R via Stan", url: "https://paul-buerkner.github.io/brms/" },
+            { type: "book", label: "Pearl & Mackenzie — The Book of Why (causal inference)", url: "http://bayes.cs.ucla.edu/WHY/" },
+            { type: "paper", label: "Kruschke 2018 — Rejecting or accepting parameter values in Bayesian estimation", url: "https://journals.sagepub.com/doi/10.1177/2515245918771304" },
+            { type: "paper", label: "Nieuwenhuis, Forstmann & Wagenmakers 2011 — Erroneous analyses of interactions", url: "https://www.nature.com/articles/nn.2886" }
           ],
           experts: [
             { name: "Richard McElreath", aff: "MPI Leipzig", why: "Best Bayesian teacher alive" },
@@ -711,7 +773,11 @@ window.ROADMAP = {
             { type: "tool", label: "MNE-Python tutorials", url: "https://mne.tools/stable/auto_tutorials/index.html" },
             { type: "tool", label: "FieldTrip walkthroughs", url: "https://www.fieldtriptoolbox.org/tutorial/" },
             { type: "course", label: "CuttingEEG / CuttingGardens workshops", url: "https://cuttingeeg.org/" },
-            { type: "paper", label: "Gross et al. 2013 — Good practice for MEG", url: "https://www.sciencedirect.com/science/article/pii/S1053811912009895" }
+            { type: "paper", label: "Gross et al. 2013 — Good practice for MEG", url: "https://www.sciencedirect.com/science/article/pii/S1053811912009895" },
+            { type: "book", label: "Hansen, Kringelbach & Salmelin — MEG: An Introduction to Methods (OUP)", url: "https://global.oup.com/academic/product/meg-9780195307238" },
+            { type: "paper", label: "Van Veen et al. 1997 — LCMV beamformer (original)", url: "https://ieeexplore.ieee.org/document/623056" },
+            { type: "paper", label: "Baillet 2017 — Magnetoencephalography for brain electrophysiology", url: "https://www.nature.com/articles/nn.4504" },
+            { type: "tool", label: "Brainstorm software (MEG/EEG)", url: "https://neuroimage.usc.edu/brainstorm/" }
           ],
           experts: [
             { name: "Riitta Salmelin", aff: "Aalto", why: "MEG of language" },
@@ -737,7 +803,11 @@ window.ROADMAP = {
             { type: "tool", label: "fMRIPrep + BIDS", url: "https://fmriprep.org/" },
             { type: "tool", label: "MRtrix3 tractography", url: "https://www.mrtrix.org/" },
             { type: "course", label: "Andy's Brain Book (free fMRI/DWI courses)", url: "https://andysbrainbook.readthedocs.io/" },
-            { type: "paper", label: "Fedorenko et al. 2010 — New method for fMRI investigations of language (functional localiser)", url: "https://pubmed.ncbi.nlm.nih.gov/20410363/" }
+            { type: "paper", label: "Fedorenko et al. 2010 — New method for fMRI investigations of language (functional localiser)", url: "https://pubmed.ncbi.nlm.nih.gov/20410363/" },
+            { type: "book", label: "Poldrack, Mumford & Nichols — Handbook of fMRI Data Analysis", url: "https://www.cambridge.org/core/books/handbook-of-functional-mri-data-analysis/8EDF966C65811FCCC306F7C916228529" },
+            { type: "paper", label: "Catani & Thiebaut de Schotten 2008 — Diffusion tensor imaging tractography atlas", url: "https://www.sciencedirect.com/science/article/pii/S0010945208701433" },
+            { type: "tool", label: "QSIPrep — reproducible DWI preprocessing", url: "https://qsiprep.readthedocs.io/" },
+            { type: "paper", label: "Esteban et al. 2019 — fMRIPrep: robust preprocessing pipeline", url: "https://www.nature.com/articles/s41592-018-0235-4" }
           ],
           experts: [
             { name: "Russell Poldrack", aff: "Stanford", why: "Open neuroimaging, reproducibility" },
@@ -761,7 +831,11 @@ window.ROADMAP = {
           resources: [
             { type: "paper", label: "Mesgarani & Chang — Selective cortical representation of attended speech", url: "https://www.nature.com/articles/nature11020" },
             { type: "paper", label: "Goldstein et al. 2022 — Shared computational principles for language in humans and LLMs", url: "https://www.nature.com/articles/s41593-022-01026-4" },
-            { type: "dataset", label: "DANDI / Brain Initiative open ECoG datasets", url: "https://dandiarchive.org/" }
+            { type: "dataset", label: "DANDI / Brain Initiative open ECoG datasets", url: "https://dandiarchive.org/" },
+            { type: "paper", label: "Bouchard et al. 2013 — Functional organisation of human sensorimotor cortex for speech", url: "https://www.nature.com/articles/nature11911" },
+            { type: "paper", label: "Anumanchipalli, Chartier & Chang 2019 — Speech synthesis from neural decoding", url: "https://www.nature.com/articles/s41586-019-1119-1" },
+            { type: "paper", label: "Crone et al. 1998 — High-gamma as functional cortical mapping signal", url: "https://academic.oup.com/brain/article/121/12/2271/325488" },
+            { type: "paper", label: "Hamilton et al. 2018 — A spatial map of onset/sustained responses to speech in temporal lobe", url: "https://www.cell.com/current-biology/fulltext/S0960-9822(18)30461-X" }
           ],
           experts: [
             { name: "Edward Chang", aff: "UCSF", why: "Speech motor + BCI" },
@@ -795,7 +869,11 @@ window.ROADMAP = {
             { type: "book", label: "Fornito, Zalesky & Bullmore — Fundamentals of Brain Network Analysis", url: "https://shop.elsevier.com/books/fundamentals-of-brain-network-analysis/fornito/978-0-12-407908-3" },
             { type: "book", label: "Sporns — Networks of the Brain", url: "https://mitpress.mit.edu/9780262528986/networks-of-the-brain/" },
             { type: "paper", label: "Gu et al. 2015 — Controllability of structural brain networks", url: "https://www.nature.com/articles/ncomms9414" },
-            { type: "tool", label: "Brain Connectivity Toolbox (BCT)", url: "https://sites.google.com/site/bctnet/" }
+            { type: "tool", label: "Brain Connectivity Toolbox (BCT)", url: "https://sites.google.com/site/bctnet/" },
+            { type: "paper", label: "Rubinov & Sporns 2010 — Complex network measures of brain connectivity", url: "https://www.sciencedirect.com/science/article/pii/S105381190901074X" },
+            { type: "paper", label: "Bassett & Sporns 2017 — Network neuroscience (Nat Neurosci review)", url: "https://www.nature.com/articles/nn.4502" },
+            { type: "paper", label: "Lurie et al. 2020 — Questions and controversies in dynamic FC", url: "https://direct.mit.edu/netn/article/4/1/30/2557/Questions-and-controversies-in-the-study-of-time" },
+            { type: "paper", label: "Faskowitz et al. 2020 — Edge-centric FC (Nat Neurosci)", url: "https://www.nature.com/articles/s41593-020-00719-y" }
           ],
           experts: [
             { name: "Olaf Sporns", aff: "Indiana", why: "Founder of connectomics" },
@@ -820,7 +898,11 @@ window.ROADMAP = {
           resources: [
             { type: "tool", label: "SPM DCM-for-EEG tutorials", url: "https://www.fil.ion.ucl.ac.uk/spm/" },
             { type: "tool", label: "The Virtual Brain (TVB)", url: "https://www.thevirtualbrain.org/" },
-            { type: "paper", label: "Deco, Jirsa & McIntosh 2011 — Emerging concepts for dynamical organisation of resting-state activity", url: "https://pubmed.ncbi.nlm.nih.gov/21170073/" }
+            { type: "paper", label: "Deco, Jirsa & McIntosh 2011 — Emerging concepts for dynamical organisation of resting-state activity", url: "https://pubmed.ncbi.nlm.nih.gov/21170073/" },
+            { type: "paper", label: "Friston, Harrison & Penny 2003 — Dynamic causal modelling (original)", url: "https://www.sciencedirect.com/science/article/pii/S1053811903002027" },
+            { type: "paper", label: "Frassle et al. 2017 — Regression DCM for fMRI", url: "https://www.sciencedirect.com/science/article/pii/S1053811917303361" },
+            { type: "paper", label: "Jansen & Rit 1995 — Electroencephalogram and visual-evoked potential generation", url: "https://link.springer.com/article/10.1007/BF00199471" },
+            { type: "paper", label: "Wilson & Cowan 1972 — Excitatory and inhibitory interactions in localized neuronal populations", url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC1484078/" }
           ],
           experts: [
             { name: "Gustavo Deco", aff: "UPF Barcelona", why: "Whole-brain dynamics" },
@@ -843,7 +925,11 @@ window.ROADMAP = {
           ],
           resources: [
             { type: "tool", label: "OHBA HMM-MAR toolbox", url: "https://github.com/OHBA-analysis/HMM-MAR" },
-            { type: "paper", label: "Vidaurre et al. 2018 — Spontaneous cortical activity transiently organises", url: "https://www.nature.com/articles/s41467-018-05316-z" }
+            { type: "paper", label: "Vidaurre et al. 2018 — Spontaneous cortical activity transiently organises", url: "https://www.nature.com/articles/s41467-018-05316-z" },
+            { type: "paper", label: "Cabral et al. 2017 — LEiDA: cognitively-relevant phase-locking patterns", url: "https://www.sciencedirect.com/science/article/pii/S1053811917305128" },
+            { type: "paper", label: "Liu & Duyn 2013 — Time-varying functional network information (CAPs)", url: "https://www.pnas.org/doi/10.1073/pnas.1216856110" },
+            { type: "paper", label: "Gallego et al. 2017 — Neural manifolds for control of movement", url: "https://www.cell.com/neuron/fulltext/S0896-6273(17)30498-3" },
+            { type: "paper", label: "Vidaurre, Smith & Woolrich 2017 — Brain network dynamics with hierarchical structure", url: "https://www.pnas.org/doi/10.1073/pnas.1705120114" }
           ],
           experts: [
             { name: "Diego Vidaurre", aff: "Aarhus", why: "HMMs for M/EEG" },
@@ -875,7 +961,11 @@ window.ROADMAP = {
           resources: [
             { type: "tool", label: "SimNIBS", url: "https://simnibs.github.io/simnibs/" },
             { type: "tool", label: "ROAST", url: "https://www.parralab.org/roast/" },
-            { type: "paper", label: "Vosskuhl, Strüber & Herrmann 2018 — Non-invasive brain stimulation: state of the art", url: "https://www.frontiersin.org/articles/10.3389/fnhum.2018.00211/full" }
+            { type: "paper", label: "Vosskuhl, Strüber & Herrmann 2018 — Non-invasive brain stimulation: state of the art", url: "https://www.frontiersin.org/articles/10.3389/fnhum.2018.00211/full" },
+            { type: "paper", label: "Huang et al. 2017 — Measurements and models of electric fields in the in vivo human brain", url: "https://elifesciences.org/articles/18834" },
+            { type: "paper", label: "Krause, Marquez-Ruiz & Cohen Kadosh 2013 — Effect of transcranial electrical stimulation on cortical activity", url: "https://www.frontiersin.org/articles/10.3389/fnhum.2013.00602/full" },
+            { type: "paper", label: "Huang et al. 2005 — Theta-burst TMS protocol (original)", url: "https://www.cell.com/neuron/fulltext/S0896-6273(04)00853-0" },
+            { type: "paper", label: "Antal et al. 2017 — Low-intensity transcranial electric stimulation safety guidelines", url: "https://www.sciencedirect.com/science/article/pii/S138824571730311X" }
           ],
           experts: [
             { name: "Christoph Herrmann", aff: "Oldenburg", why: "tACS oscillation entrainment" },
@@ -898,7 +988,11 @@ window.ROADMAP = {
           ],
           resources: [
             { type: "paper", label: "Fox et al. — Resting-state networks link DBS, TMS, lesions", url: "https://www.pnas.org/doi/10.1073/pnas.1405003111" },
-            { type: "paper", label: "Zrenner et al. 2018 — EEG-triggered TMS reveals brain state-dependent effects", url: "https://www.sciencedirect.com/science/article/abs/pii/S1935861X18303115" }
+            { type: "paper", label: "Zrenner et al. 2018 — EEG-triggered TMS reveals brain state-dependent effects", url: "https://www.sciencedirect.com/science/article/abs/pii/S1935861X18303115" },
+            { type: "paper", label: "Cole et al. 2020 — Stanford Accelerated Intelligent Neuromodulation Therapy (SAINT)", url: "https://ajp.psychiatryonline.org/doi/10.1176/appi.ajp.2019.19070720" },
+            { type: "paper", label: "Legon et al. 2014 — Transcranial focused ultrasound modulates human primary somatosensory cortex", url: "https://www.nature.com/articles/nn.3620" },
+            { type: "paper", label: "Helfrich et al. 2014 — Entrainment of brain oscillations by transcranial alternating current stimulation", url: "https://www.cell.com/current-biology/fulltext/S0960-9822(13)01567-3" },
+            { type: "paper", label: "Stagg & Nitsche 2011 — Physiological basis of transcranial direct current stimulation", url: "https://journals.sagepub.com/doi/10.1177/1073858410386614" }
           ],
           experts: [
             { name: "Michael D. Fox", aff: "Harvard/BWH", why: "Lesion- & connectivity-guided stimulation" },
@@ -922,7 +1016,11 @@ window.ROADMAP = {
           resources: [
             { type: "tool", label: "BCBToolkit / Disconnectome maps", url: "http://toolkit.bcblab.com/" },
             { type: "paper", label: "Siddiqi, Kording, Grafman, Fox 2022 — Causal mapping of human brain function", url: "https://www.nature.com/articles/s41583-022-00583-8" },
-            { type: "paper", label: "Saur et al. — Dynamics of language reorganisation after stroke", url: "https://academic.oup.com/brain/article/129/6/1371/391105" }
+            { type: "paper", label: "Saur et al. — Dynamics of language reorganisation after stroke", url: "https://academic.oup.com/brain/article/129/6/1371/391105" },
+            { type: "paper", label: "Boes et al. 2015 — Network localization of neurological symptoms from focal lesions", url: "https://academic.oup.com/brain/article/138/10/3061/2848211" },
+            { type: "paper", label: "Price 2017 — The PLORAS database (predicting language outcomes after stroke)", url: "https://www.sciencedirect.com/science/article/pii/S0028393217301045" },
+            { type: "paper", label: "Pulvermüller, Berthier 2008 — Aphasia therapy on a neuroscience basis", url: "https://www.tandfonline.com/doi/full/10.1080/02687030701612213" },
+            { type: "paper", label: "Hartwigsen & Saur 2019 — Neuroimaging of stroke recovery from aphasia", url: "https://www.sciencedirect.com/science/article/pii/S1053811917311175" }
           ],
           experts: [
             { name: "Shan Siddiqi", aff: "Harvard/BWH", why: "Lesion-network in psychiatry/neurology" },
@@ -953,7 +1051,11 @@ window.ROADMAP = {
           ],
           resources: [
             { type: "tool", label: "TalkBank / AphasiaBank", url: "https://aphasia.talkbank.org/" },
-            { type: "paper", label: "Mirman et al. 2015 — Neural organisation of spoken language revealed by lesion-symptom mapping", url: "https://www.nature.com/articles/ncomms7762" }
+            { type: "paper", label: "Mirman et al. 2015 — Neural organisation of spoken language revealed by lesion-symptom mapping", url: "https://www.nature.com/articles/ncomms7762" },
+            { type: "paper", label: "Gorno-Tempini et al. 2011 — Classification of primary progressive aphasia", url: "https://www.neurology.org/doi/10.1212/WNL.0b013e31821103e6" },
+            { type: "paper", label: "Fromm, Forbes, Holland, MacWhinney 2020 — AphasiaBank corpus design", url: "https://pubmed.ncbi.nlm.nih.gov/33126865/" },
+            { type: "paper", label: "Stark, Bryant, Themistocleous 2021 — Best practices for discourse data collection", url: "https://pubs.asha.org/doi/10.1044/2021_AJSLP-20-00261" },
+            { type: "paper", label: "Kiran & Thompson 2019 — Neuroplasticity associated with aphasia therapy", url: "https://www.frontiersin.org/articles/10.3389/fneur.2019.00295/full" }
           ],
           experts: [
             { name: "Brian MacWhinney", aff: "CMU", why: "TalkBank/AphasiaBank" },
@@ -978,7 +1080,11 @@ window.ROADMAP = {
           resources: [
             { type: "course", label: "Neuromatch Deep Learning", url: "https://deeplearning.neuromatch.io/" },
             { type: "tool", label: "scikit-learn + MNE decoding tutorials", url: "https://mne.tools/stable/auto_tutorials/machine-learning/index.html" },
-            { type: "paper", label: "Kriegeskorte & Diedrichsen 2019 — Peeling the onion of brain representations", url: "https://www.annualreviews.org/doi/10.1146/annurev-neuro-080317-061906" }
+            { type: "paper", label: "Kriegeskorte & Diedrichsen 2019 — Peeling the onion of brain representations", url: "https://www.annualreviews.org/doi/10.1146/annurev-neuro-080317-061906" },
+            { type: "paper", label: "Kriegeskorte, Mur & Bandettini 2008 — Representational similarity analysis", url: "https://www.frontiersin.org/articles/10.3389/neuro.06.004.2008/full" },
+            { type: "book", label: "Goodfellow, Bengio & Courville — Deep Learning (free online)", url: "https://www.deeplearningbook.org/" },
+            { type: "paper", label: "Varoquaux et al. 2017 — Assessing and tuning brain decoders", url: "https://www.sciencedirect.com/science/article/pii/S105381191630595X" },
+            { type: "paper", label: "Yamins & DiCarlo 2016 — Using goal-driven deep models to understand sensory cortex", url: "https://www.nature.com/articles/nn.4244" }
           ],
           experts: [
             { name: "Nikolaus Kriegeskorte", aff: "Columbia", why: "RSA, model-brain comparison" },
@@ -1001,7 +1107,11 @@ window.ROADMAP = {
           resources: [
             { type: "paper", label: "Schrimpf et al. 2021 — Neural architecture of language", url: "https://www.pnas.org/doi/10.1073/pnas.2105646118" },
             { type: "paper", label: "Tuckute et al. 2024 — Driving and suppressing the human language network", url: "https://www.nature.com/articles/s41562-023-01783-7" },
-            { type: "paper", label: "Antonello et al. — Scaling laws for language encoding models in fMRI", url: "https://arxiv.org/abs/2305.11863" }
+            { type: "paper", label: "Antonello et al. — Scaling laws for language encoding models in fMRI", url: "https://arxiv.org/abs/2305.11863" },
+            { type: "paper", label: "Caucheteux & King 2022 — Brains and algorithms partially converge in natural language processing", url: "https://www.nature.com/articles/s42003-022-03036-1" },
+            { type: "paper", label: "Toneva & Wehbe 2019 — Interpreting and improving NLP models with brain recordings", url: "https://proceedings.neurips.cc/paper/2019/hash/749a8e6c231831ef7756db230b4359c8-Abstract.html" },
+            { type: "paper", label: "Pasquiou et al. 2022 — Neural language models are good predictors of fMRI", url: "https://aclanthology.org/2022.acl-long.273/" },
+            { type: "paper", label: "Goldstein et al. 2022 — Shared computational principles for language in humans and LLMs", url: "https://www.nature.com/articles/s41593-022-01026-4" }
           ],
           experts: [
             { name: "Evelina Fedorenko", aff: "MIT", why: "Language network + LLMs" },
@@ -1025,7 +1135,11 @@ window.ROADMAP = {
           resources: [
             { type: "tool", label: "OSF Registries", url: "https://osf.io/registries/" },
             { type: "book", label: "NIH Grants & Funding portal", url: "https://www.nih.gov/grants-funding" },
-            { type: "course", label: "EQUATOR Network guidelines", url: "https://www.equator-network.org/" }
+            { type: "course", label: "EQUATOR Network guidelines", url: "https://www.equator-network.org/" },
+            { type: "paper", label: "Schulz, Altman & Moher 2010 — CONSORT 2010 statement", url: "https://www.bmj.com/content/340/bmj.c332" },
+            { type: "paper", label: "Nosek et al. 2018 — The preregistration revolution (PNAS)", url: "https://www.pnas.org/doi/10.1073/pnas.1708274114" },
+            { type: "paper", label: "Chambers 2019 — What's next for Registered Reports? (Nature)", url: "https://www.nature.com/articles/d41586-019-02674-6" },
+            { type: "book", label: "Barker — At The Helm: Leading Your Laboratory (CSHL Press, 2nd ed.)", url: "https://www.cshlpress.com/link/at_helm2.htm" }
           ],
           experts: [
             { name: "Russell Poldrack", aff: "Stanford", why: "Open science leadership" },
@@ -1044,21 +1158,104 @@ window.ROADMAP = {
 (function(){
   const STORAGE_KEY = "langneuro_roadmap_v1";
   const data = window.ROADMAP;
+  const ACTIVE_SLOTS = 4;
+
+  // ----- source-key helpers -----
+  // Each resource is identified by a stable "key":
+  //   "b:<idx>" for builtin (index into m.resources)
+  //   "c:<idx>" for custom (index into state.modules[mid].customResources)
+  function bKey(i){ return "b:" + i; }
+  function cKey(i){ return "c:" + i; }
+  function getResource(m, mst, key){
+    if(!key) return null;
+    const [t, idxStr] = key.split(":");
+    const idx = Number(idxStr);
+    if(t === "b") return m.resources[idx] || null;
+    if(t === "c") return (mst.customResources || [])[idx] || null;
+    return null;
+  }
+  // All keys for a module (builtin + custom), in original order
+  function allKeysFor(m, mst){
+    const out = [];
+    m.resources.forEach((_,i) => out.push(bKey(i)));
+    (mst.customResources || []).forEach((_,i) => out.push(cKey(i)));
+    return out;
+  }
+  // Keys still available (not in completed, not in active)
+  function availableKeys(m, mst){
+    const completedSet = new Set((mst.completedResources || []).map(r => r.key));
+    const activeSet = new Set(mst.activeKeys || []);
+    return allKeysFor(m, mst).filter(k => !completedSet.has(k) && !activeSet.has(k));
+  }
+  // Fill activeKeys up to ACTIVE_SLOTS from pool
+  function topUpActive(m, mst){
+    if(!mst.activeKeys) mst.activeKeys = [];
+    const pool = availableKeys(m, mst);
+    while(mst.activeKeys.length < ACTIVE_SLOTS && pool.length > 0){
+      mst.activeKeys.push(pool.shift());
+    }
+  }
 
   // ----- state -----
+  const defaultModuleState = (m) => {
+    const mst = {
+      status: "todo",        // todo | doing | done
+      percent: 0,
+      notes: "",
+      activeKeys: [],        // up to 4 currently-shown source keys
+      completedResources: [],// [{ key, completedAt }]
+      customResources: [],   // user-added [{ type, label, url, addedAt }]
+      lastTouched: null
+    };
+    topUpActive(m, mst);
+    return mst;
+  };
   const defaultState = () => {
     const modules = {};
     data.pillars.forEach(p => p.modules.forEach(m => {
-      modules[m.id] = {
-        status: "todo",      // todo | doing | done
-        percent: 0,
-        notes: "",
-        resourcesDone: {},
-        lastTouched: null
-      };
+      modules[m.id] = defaultModuleState(m);
     }));
     return { modules, log: [], theme: "light", startISO: data.meta.startISO };
   };
+
+  // Migrate legacy v1 module state ({ resourcesDone: {idx: bool} }) into
+  // the new active/completed model.
+  function migrateModuleState(m, oldMst){
+    const fresh = defaultModuleState(m);
+    fresh.status = oldMst.status || fresh.status;
+    fresh.percent = typeof oldMst.percent === "number" ? oldMst.percent : 0;
+    fresh.notes = oldMst.notes || "";
+    fresh.lastTouched = oldMst.lastTouched || null;
+    // Carry forward already-present new fields if present (re-load case)
+    if(Array.isArray(oldMst.completedResources)) fresh.completedResources = oldMst.completedResources.slice();
+    if(Array.isArray(oldMst.activeKeys)) fresh.activeKeys = oldMst.activeKeys.slice();
+    if(Array.isArray(oldMst.customResources)) fresh.customResources = oldMst.customResources.slice();
+    // Legacy: convert resourcesDone {0:true,2:true} -> completedResources
+    if(oldMst.resourcesDone && (!oldMst.completedResources || oldMst.completedResources.length === 0)){
+      const completedSet = new Set(fresh.completedResources.map(r => r.key));
+      Object.keys(oldMst.resourcesDone).forEach(k => {
+        if(oldMst.resourcesDone[k]){
+          const key = bKey(Number(k));
+          if(!completedSet.has(key) && m.resources[Number(k)]){
+            fresh.completedResources.push({ key, completedAt: oldMst.lastTouched || todayISO() });
+            completedSet.add(key);
+          }
+        }
+      });
+      // Rebuild activeKeys excluding completed ones
+      fresh.activeKeys = [];
+      topUpActive(m, fresh);
+    } else {
+      // Make sure activeKeys is valid (drop completed/missing, top up)
+      const completedSet = new Set(fresh.completedResources.map(r => r.key));
+      fresh.activeKeys = (fresh.activeKeys || []).filter(k => {
+        if(completedSet.has(k)) return false;
+        return !!getResource(m, fresh, k);
+      });
+      topUpActive(m, fresh);
+    }
+    return fresh;
+  }
 
   let state = loadState();
   function loadState(){
@@ -1066,11 +1263,12 @@ window.ROADMAP = {
       const raw = localStorage.getItem(STORAGE_KEY);
       if(!raw) return defaultState();
       const parsed = JSON.parse(raw);
-      // merge with defaults to catch new modules
       const fresh = defaultState();
-      Object.keys(fresh.modules).forEach(id => {
-        if(parsed.modules && parsed.modules[id]) fresh.modules[id] = { ...fresh.modules[id], ...parsed.modules[id] };
-      });
+      data.pillars.forEach(p => p.modules.forEach(m => {
+        if(parsed.modules && parsed.modules[m.id]){
+          fresh.modules[m.id] = migrateModuleState(m, parsed.modules[m.id]);
+        }
+      }));
       fresh.log = parsed.log || [];
       fresh.theme = parsed.theme || "light";
       fresh.startISO = parsed.startISO || data.meta.startISO;
@@ -1223,19 +1421,58 @@ window.ROADMAP = {
     });
   }
 
+  function escapeHtml(s){
+    return String(s||"").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]));
+  }
+
   function buildModuleNode(m, p){
     const st = state.modules[m.id];
+    // Ensure active slots are filled (e.g. after adding custom resource)
+    topUpActive(m, st);
     const node = document.createElement("div");
     node.className = "module";
     node.dataset.id = m.id;
-    const resHTML = m.resources.map((r,i) => {
-      const checked = st.resourcesDone[i] ? "checked" : "";
-      return `<label class="res-item">
-        <input type="checkbox" data-res="${i}" ${checked} />
-        <span class="type-tag">${r.type}</span>
-        <a href="${r.url}" target="_blank" rel="noopener">${r.label}</a>
-      </label>`;
+
+    // Active 4 critical sources
+    const activeSlots = [];
+    for(let i=0; i<ACTIVE_SLOTS; i++){
+      const key = st.activeKeys[i];
+      const r = key ? getResource(m, st, key) : null;
+      if(r){
+        const isCustom = key.startsWith("c:");
+        activeSlots.push(`<div class="res-item active" data-key="${key}">
+          <span class="type-tag">${escapeHtml(r.type)}</span>
+          <a href="${escapeHtml(r.url)}" target="_blank" rel="noopener">${escapeHtml(r.label)}</a>
+          ${isCustom ? '<span class="custom-badge" title="Added by you">custom</span>' : ''}
+          <button class="res-done-btn" data-key="${key}" title="Mark this source as completed">✓ Done</button>
+        </div>`);
+      } else {
+        activeSlots.push(`<div class="res-item empty">
+          <span class="type-tag">empty</span>
+          <span style="color:var(--text-mute); font-size:12px">No more curated sources — add one below.</span>
+        </div>`);
+      }
+    }
+    const activeHTML = activeSlots.join("");
+
+    // Completed archive
+    const completedHTML = (st.completedResources || []).slice().reverse().map(c => {
+      const r = getResource(m, st, c.key);
+      if(!r) return "";
+      const isCustom = c.key.startsWith("c:");
+      return `<div class="res-item completed" data-key="${c.key}">
+        <span class="type-tag">${escapeHtml(r.type)}</span>
+        <a href="${escapeHtml(r.url)}" target="_blank" rel="noopener">${escapeHtml(r.label)}</a>
+        ${isCustom ? '<span class="custom-badge">custom</span>' : ''}
+        <span class="done-date">done ${fmtDate(c.completedAt)}</span>
+        <button class="res-restore-btn" data-key="${c.key}" title="Restore to active list">↻</button>
+      </div>`;
     }).join("");
+
+    const poolRemaining = availableKeys(m, st).length;
+    const completedCount = (st.completedResources || []).length;
+    const activeCount = st.activeKeys.filter(k => getResource(m, st, k)).length;
+
     const expHTML = m.experts.map(e =>
       `<div class="exp-item"><strong>${e.name}</strong> <span class="aff">· ${e.aff}</span><br/><span style="font-size:12px">${e.why}</span></div>`
     ).join("");
@@ -1274,8 +1511,33 @@ window.ROADMAP = {
         </div>
         <div class="grid-2">
           <div class="field">
-            <div class="field-label">Resources (where)</div>
-            <div class="res-list">${resHTML}</div>
+            <div class="field-label">
+              Critical sources (where)
+              <span class="src-counter">${activeCount} active · ${completedCount} completed · ${poolRemaining} remaining</span>
+            </div>
+            <div class="res-list active-list">${activeHTML}</div>
+            <details class="completed-archive" ${completedCount === 0 ? "" : ""}>
+              <summary>Completed archive (${completedCount})</summary>
+              <div class="res-list completed-list">
+                ${completedHTML || '<div style="color:var(--text-mute); font-size:12px; padding:4px 0">No completed sources yet — mark items “Done” in the active list above.</div>'}
+              </div>
+            </details>
+            <details class="add-custom">
+              <summary>+ Add your own source</summary>
+              <form class="add-res-form" autocomplete="off">
+                <input type="text" class="add-label" placeholder="Title (e.g. Author Year — Paper title)" required />
+                <input type="url" class="add-url" placeholder="https://..." required />
+                <select class="add-type">
+                  <option value="paper">paper</option>
+                  <option value="book">book</option>
+                  <option value="course">course</option>
+                  <option value="tool">tool</option>
+                  <option value="dataset">dataset</option>
+                  <option value="other">other</option>
+                </select>
+                <button type="submit">Add</button>
+              </form>
+            </details>
           </div>
           <div class="field">
             <div class="field-label">Experts (who)</div>
@@ -1337,14 +1599,86 @@ window.ROADMAP = {
       notesTimer = setTimeout(() => { st.lastTouched = todayISO(); saveState(); }, 400);
     });
 
-    // resource checkboxes
-    node.querySelectorAll('input[type=checkbox][data-res]').forEach(cb => {
-      cb.addEventListener("change", (e) => {
-        const idx = e.target.dataset.res;
-        st.resourcesDone[idx] = e.target.checked;
+    // mark-as-done on active sources
+    node.querySelectorAll(".res-done-btn").forEach(btn => {
+      btn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const key = btn.dataset.key;
+        // remove from active
+        const idx = st.activeKeys.indexOf(key);
+        if(idx >= 0) st.activeKeys.splice(idx, 1);
+        // archive
+        st.completedResources = st.completedResources || [];
+        if(!st.completedResources.some(c => c.key === key)){
+          st.completedResources.push({ key, completedAt: todayISO() });
+        }
+        // top up active from pool
+        topUpActive(m, st);
         st.lastTouched = todayISO();
         saveState();
+        // re-render this module + overview counters
+        const replacement = buildModuleNode(m, p);
+        node.replaceWith(replacement);
+        replacement.classList.add("open");
+        renderOverview();
       });
+    });
+
+    // restore from completed archive
+    node.querySelectorAll(".res-restore-btn").forEach(btn => {
+      btn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const key = btn.dataset.key;
+        st.completedResources = (st.completedResources || []).filter(c => c.key !== key);
+        // Restore strategy:
+        //   - If there's room in active (slots < 4), drop it into active.
+        //   - Otherwise the restored item returns to the pool; it becomes
+        //     eligible to be auto-selected next time a slot frees.
+        if(st.activeKeys.length < ACTIVE_SLOTS){
+          st.activeKeys.push(key);
+        }
+        st.lastTouched = todayISO();
+        saveState();
+        const replacement = buildModuleNode(m, p);
+        node.replaceWith(replacement);
+        replacement.classList.add("open");
+        renderOverview();
+      });
+    });
+
+    // add custom source
+    const addForm = node.querySelector(".add-res-form");
+    if(addForm){
+      addForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const label = addForm.querySelector(".add-label").value.trim();
+        const url = addForm.querySelector(".add-url").value.trim();
+        const type = addForm.querySelector(".add-type").value;
+        if(!label || !url) return;
+        st.customResources = st.customResources || [];
+        st.customResources.push({ type, label, url, addedAt: todayISO() });
+        const newIdx = st.customResources.length - 1;
+        const key = cKey(newIdx);
+        // If there's an empty active slot, fill it immediately
+        if(st.activeKeys.length < ACTIVE_SLOTS){
+          st.activeKeys.push(key);
+        }
+        // else it sits in the pool until a slot frees
+        st.lastTouched = todayISO();
+        saveState();
+        const replacement = buildModuleNode(m, p);
+        node.replaceWith(replacement);
+        replacement.classList.add("open");
+        renderOverview();
+      });
+      // prevent header-click toggle when interacting with form
+      addForm.addEventListener("click", e => e.stopPropagation());
+    }
+
+    // prevent collapse when interacting with details summaries inside body
+    node.querySelectorAll(".module-body details, .module-body details > summary").forEach(el => {
+      el.addEventListener("click", e => e.stopPropagation());
     });
 
     return node;
